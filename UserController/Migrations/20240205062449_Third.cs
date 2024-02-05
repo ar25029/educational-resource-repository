@@ -1,12 +1,11 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace UserController.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class Third : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,7 +22,7 @@ namespace UserController.Migrations
                     Password = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Standard = table.Column<int>(type: "int", nullable: false),
                     Roll = table.Column<int>(type: "int", nullable: false),
-                    DOB = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    DOB = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

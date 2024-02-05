@@ -4,6 +4,11 @@ using AdminController.Models.ResponseModels;
 using AdminController.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace AdminController.Controllers
 {
@@ -12,10 +17,11 @@ namespace AdminController.Controllers
     public class AdminController : ControllerBase
     {
         private readonly IAdminServices _adminServices;
-
-        public AdminController(IAdminServices adminServices)
+        private IConfiguration _configuration;
+        public AdminController(IAdminServices adminServices, IConfiguration configuration)
         {
             _adminServices = adminServices;
+            _configuration = configuration;
         }
 
         [HttpGet("GetAll")]
@@ -90,30 +96,81 @@ namespace AdminController.Controllers
         }
 
         [HttpPost("Login")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TokenResponseModel))]
+
         public async Task<IActionResult> Login(LoginModel model)
         {
             TryValidateModel(model);
             if (!ModelState.IsValid)
             {
-                BadRequest(ModelState);
+                return Unauthorized(ModelState);
             }
 
             var result = await _adminServices.LoginAdmin(model);
-
-            if(result == 1)
+            if(result == null)
             {
-                return BadRequest("Email Not Found");
+                return Unauthorized("Invalid Username and Password");
             }
-            else if(result == 2)
-            {
-                return BadRequest("Password Not Found");
-            }
-            //else if(result == 3)
-            //{
-            //    return BadRequest("Email and Password are not matched");
-            //}
-            return Ok("Welcome to our website");
 
+            if (model.Email == result.Email)
+            {
+                if (model.Password != result.Password)
+                {
+                    return Unauthorized("Wrong Password");
+                }
+
+            }
+            else if (model.Password == result.Password)
+            {
+                if (model.Email != result.Email)
+                {
+                    return Unauthorized("Wrong Email");
+                }
+            }
+            
+                string token = GenerateToken(result);
+
+                return Ok(new TokenResponseModel 
+                { 
+                    Token = token,
+                    Username = result.Username,
+                    Id = result.Id,
+                    Email = result.Email
+                });
+            
+            
+
+          
+        }
+
+
+        [NonAction]
+        private string GenerateToken(Admin admin)
+        {
+            var issuer = _configuration.GetValue<string>("jwt:Issuer");
+            var audience = _configuration.GetValue<string>("jwt:Audience");
+            var secretkey = _configuration.GetValue<string>("jwt:SecretKey");
+
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Name,admin.Username),
+                new Claim(JwtRegisteredClaimNames.Email,admin.Email),
+                new Claim(JwtRegisteredClaimNames.Sub,admin.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Role,admin.Role),
+                new Claim(JwtRegisteredClaimNames.GivenName,admin.Username)
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretkey));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var token = new JwtSecurityToken(
+                issuer: issuer,
+                audience: audience,
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(2),
+                signingCredentials: creds
+                );
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
 

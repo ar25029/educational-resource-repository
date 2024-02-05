@@ -37,6 +37,8 @@ namespace UserController
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
 

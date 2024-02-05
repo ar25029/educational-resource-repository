@@ -134,3 +134,4 @@ D:\24167_Suraj_Shinde\Projects\Project\AdminController\obj\Debug\net8.0\refint\A
 D:\24167_Suraj_Shinde\Projects\Project\AdminController\obj\Debug\net8.0\AdminController.pdb
 D:\24167_Suraj_Shinde\Projects\Project\AdminController\obj\Debug\net8.0\AdminController.genruntimeconfig.cache
 D:\24167_Suraj_Shinde\Projects\Project\AdminController\obj\Debug\net8.0\ref\AdminController.dll
+D:\24167_Suraj_Shinde\Projects\Project\AdminController\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

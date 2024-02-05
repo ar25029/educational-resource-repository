@@ -36,6 +36,8 @@ namespace AdminController
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
 

@@ -90,6 +90,7 @@ namespace AdminController.Services
 
             if(demoAdmin != null)
             {
+
                 if(demoAdmin.Username != _admin.Username)
                 {
                     _admin.Username = demoAdmin.Username;
@@ -111,30 +112,35 @@ namespace AdminController.Services
 
 
 
-        public async Task<int> LoginAdmin(LoginModel model)
+        public async Task<Admin> LoginAdmin(LoginModel model)
         {
             var _admin = await _db.Admins.ToListAsync();
-
-            foreach (var item in _admin)
+            var user = _db.Admins.FirstOrDefault(u => u.Email == model.Email && u.Password == model.Password);
+            if(user != null)
             {
-                if(item.Email == model.Email )
-                {
-                    if(item.Password != model.Password)
-                    {
-                        return  2;
-                    }
-                    
-                }
-                else if(item.Password == model.Password)
-                {
-                    if(item.Email != model.Email)
-                    {
-                        return 1;
-                    }
-                }
-                                
+                return user;
             }
-            return 3;
+            return null;
+            //foreach (var item in _admin)
+            //{
+            //    if(item.Email == model.Email )
+            //    {
+            //        if(item.Password != model.Password)
+            //        {
+            //            return  2;
+            //        }
+                    
+            //    }
+            //    else if(item.Password == model.Password)
+            //    {
+            //        if(item.Email != model.Email)
+            //        {
+            //            return 1;
+            //        }
+            //    }
+                                
+            //}
+            
         }
 
 

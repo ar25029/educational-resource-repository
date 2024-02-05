@@ -134,3 +134,4 @@ D:\24167_Suraj_Shinde\Projects\Project\UserController\obj\Debug\net8.0\refint\Us
 D:\24167_Suraj_Shinde\Projects\Project\UserController\obj\Debug\net8.0\UserController.pdb
 D:\24167_Suraj_Shinde\Projects\Project\UserController\obj\Debug\net8.0\UserController.genruntimeconfig.cache
 D:\24167_Suraj_Shinde\Projects\Project\UserController\obj\Debug\net8.0\ref\UserController.dll
+D:\24167_Suraj_Shinde\Projects\Project\UserController\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

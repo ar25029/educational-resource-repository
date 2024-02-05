@@ -18,7 +18,7 @@ namespace UserController.Models.ResponseModel
 
         public int Roll { get; set; }
 
-        public DateTime DOB { get; set; }
+        public string DOB { get; set; } 
 
     }
 }

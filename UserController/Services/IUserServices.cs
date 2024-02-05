@@ -12,7 +12,7 @@ namespace UserController.Services
         public Task<bool> Deleteuser(int id);
         public Task<List<User>> GetAllUsers();
 
-        public Task<int> LoginUser(LoginModel model);
+        public Task<User> LoginUser(LoginModel model);
 
     }
 }

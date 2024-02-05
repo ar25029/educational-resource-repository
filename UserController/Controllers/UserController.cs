@@ -1,7 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using UserController.Models.EntityModel;
 using UserController.Models.RequestModel;
+using UserController.Models.ResponseModel;
 using UserController.Services;
 
 namespace UserController.Controllers
@@ -12,10 +18,12 @@ namespace UserController.Controllers
     {
 
         private readonly IUserServices _userServices;
+        private IConfiguration _configuration;
 
-        public UserController(IUserServices userServices)
+        public UserController(IUserServices userServices, IConfiguration configuration)
         {
             _userServices = userServices;
+            _configuration = configuration;
         }
 
         [HttpGet("GetAll")]
@@ -99,18 +107,66 @@ namespace UserController.Controllers
             }
 
             var result = await _userServices.LoginUser(model);
-
-            if (result == 1)
+            if (result == null)
             {
-                return BadRequest("Email Not Found");
+                return Unauthorized("Invalid Username and Password");
             }
-            else if (result == 2)
-            {
-                return BadRequest("Password Not Found");
-            }
-            
-            return Ok("Welcome to our website");
 
+            if (model.Email == result.Email)
+            {
+                if (model.Password != result.Password)
+                {
+                    return Unauthorized("Wrong Password");
+                }
+
+            }
+            else if (model.Password == result.Password)
+            {
+                if (model.Email != result.Email)
+                {
+                    return Unauthorized("Wrong Email");
+                }
+            }
+
+            string token = GenerateToken(result);
+
+            return Ok(new TokenResponseModel
+            {
+                Token = token,
+                Username = result.Username,
+                Id = result.Id,
+                Email = result.Email
+            });
         }
+
+        [NonAction]
+        private string GenerateToken(User user)
+        {
+            var issuer = _configuration.GetValue<string>("jwt:Issuer");
+            var audience = _configuration.GetValue<string>("jwt:Audience");
+            var secretkey = _configuration.GetValue<string>("jwt:SecretKey");
+
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Name,user.Username),
+                new Claim(JwtRegisteredClaimNames.Email,user.Email),
+                new Claim(JwtRegisteredClaimNames.Sub,user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Role,user.Role),
+                new Claim(JwtRegisteredClaimNames.GivenName,user.Username)
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretkey));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var token = new JwtSecurityToken(
+                issuer: issuer,
+                audience: audience,
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(2),
+                signingCredentials: creds
+                );
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
     }
 }

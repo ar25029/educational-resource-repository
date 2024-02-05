@@ -12,7 +12,7 @@ namespace AdminController.Services
         public Task<bool> DeleteAdmin(int id);
         public Task<List<Admin>> GetAllAdmins();
 
-        public Task<int> LoginAdmin(LoginModel model);
+        public Task<Admin> LoginAdmin(LoginModel model);
 
 
 

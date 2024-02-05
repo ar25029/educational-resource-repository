@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UserController.Models.EntityModel
@@ -31,13 +32,13 @@ namespace UserController.Models.EntityModel
         public string Password { get; set; } = string.Empty;
 
 
-        [Required(ErrorMessage ="Standard should be given")]
+        [Required(ErrorMessage = "Standard should be given")]
         public int Standard { get; set; }
 
         [Required(ErrorMessage = "Roll number should be given")]
+        public int Roll { get; set; }
 
-        public int Roll {  get; set; }
-
-        public DateTime DOB { get; set; }
+        [DefaultValue("MM-DD-YYYY")]
+        public string DOB { get; set; }
     }
 }
