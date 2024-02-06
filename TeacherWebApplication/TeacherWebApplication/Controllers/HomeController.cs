@@ -130,21 +130,21 @@ namespace TeacherWebApplication.Controllers
                 return Unauthorized("Invalid Username and Password");
             }
 
-            if (model.Email == result.Email)
-            {
-                if (model.Password != result.Password)
-                {
-                    return Unauthorized("Wrong Password");
-                }
+            //if (model.Email == result.Email)
+            //{
+            //    if (model.Password != result.Password)
+            //    {
+            //        return Unauthorized("Wrong Password");
+            //    }
 
-            }
-            else if (model.Password == result.Password)
-            {
-                if (model.Email != result.Email)
-                {
-                    return Unauthorized("Wrong Email");
-                }
-            }
+            //}
+            //else if (model.Password == result.Password)
+            //{
+            //    if (model.Email != result.Email)
+            //    {
+            //        return Unauthorized("Wrong Email");
+            //    }
+            //}
 
             string token = GenerateToken(result);
 

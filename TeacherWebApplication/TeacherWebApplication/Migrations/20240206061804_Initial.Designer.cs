@@ -11,7 +11,7 @@ using TeacherWebApplication.Data;
 namespace TeacherWebApplication.Migrations
 {
     [DbContext(typeof(TeacherDbContext))]
-    [Migration("20240204110934_Initial")]
+    [Migration("20240206061804_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

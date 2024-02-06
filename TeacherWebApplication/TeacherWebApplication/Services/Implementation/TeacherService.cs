@@ -54,6 +54,8 @@ namespace TeacherWebApplication.Services
             return false;
         }
 
+       
+
         public async Task<List<TeacherResponseModel>> GetAllTeacher()
         {
             List<Teacher> list = await _db.TeacherTable.ToListAsync();
@@ -85,6 +87,7 @@ namespace TeacherWebApplication.Services
             {
                 return new TeacherResponseModel
                 {
+
                     Username = teacher.Username,
                     Email = teacher.Email,
                     FirstName = teacher.FirstName,
@@ -130,6 +133,11 @@ namespace TeacherWebApplication.Services
             await _db.SaveChangesAsync();
             return teacher;
 
+        }
+
+        public Task<string> ForgetPassword(ForgetPasswordRequest forgetPassword)
+        {
+            
         }
     }
 }
