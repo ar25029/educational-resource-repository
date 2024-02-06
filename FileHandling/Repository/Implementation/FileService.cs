@@ -28,7 +28,7 @@ namespace FileHandling.Repository.Implementation
 
                 //Check the allowed extensions
                 var ext = Path.GetExtension(imageFile.FileName);
-                var allowedExtensions = new string[] { ".jpg", ".png", ".jpeg", ".pdf", ".doc" };
+                var allowedExtensions = new string[] { ".jpg", ".png", ".jpeg", ".pdf", ".doc", ".mp4" ,".mpeg"};
                 if (!allowedExtensions.Contains(ext))
                 {
                     string msg = string.Format("Only {0} extensions are allowed", string.Join(",", allowedExtensions));
@@ -110,6 +110,12 @@ namespace FileHandling.Repository.Implementation
                             break;
                         case ".pdf":
                             contentType = "application/pdf";
+                            break;
+                        case ".mp4":
+                            contentType = "video/mp4";
+                            break;
+                        case ".mpeg":
+                            contentType = "video/mpeg";
                             break;
                         default:
                             contentType = "application/octet-stream";
