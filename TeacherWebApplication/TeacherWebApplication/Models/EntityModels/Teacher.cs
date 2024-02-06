@@ -31,23 +31,11 @@ namespace TeacherWebApplication.Models.EntityModels
         //[DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; } = string.Empty;
 
-        // what classes are assigned to teacher will be here by admin
-        public string AssignedClasses {  get; set; } = string.Empty;
-
-        // what classes are assigned to teacher will be here by admin
-        public string TeacherSubjects {  get; set; } = string.Empty;
-
         [StringLength(20, ErrorMessage = "Role can't be longer than 20 characters")]
         public string Role { get; set; } = "Teacher";
 
-        [Required(ErrorMessage = "First Name is required")]
-        [StringLength(40, ErrorMessage = "Must be less than 40 characters")]
-        public string FirstName { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Last name is required")]
+        [Required(ErrorMessage = "name is required")]
         [StringLength(40, ErrorMessage = "Must be less than 40 charecters")]
-        public string LastName { get; set; } = string.Empty;
-
-        public string Qualifications {  get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
     }
 }

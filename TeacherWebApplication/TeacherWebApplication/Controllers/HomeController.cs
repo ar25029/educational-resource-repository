@@ -90,29 +90,29 @@ namespace TeacherWebApplication.Controllers
             return Ok();
         }
 
-        //[HttpPost("login")]
-        //public async Task<IActionResult> LoginTeacher(TeacherLoginModel model)
-        //{
-        //    TryValidateModel(model);
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState); 
-        //    }
-        //    var result = await _ts.LoginTeacher(model);
-        //    if(result == 1)
-        //    {
-        //        return BadRequest("Password is Incorrect");
-        //    }
-        //    else if(result == 2)
-        //    {
-        //        return BadRequest("Email is Incorrect");
-        //    }
-        //    else if (result == 0)
-        //    {
-        //        return Ok("Welcome to our website");
-        //    }
-        //    return BadRequest("Access Denied");
-        //}
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginTeacher(TeacherLoginModel model)
+        {
+            TryValidateModel(model);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _ts.LoginTeacher(model);
+            if (result.Equals(1))
+            {
+                return BadRequest("Password is Incorrect");
+            }
+            else if (result.Equals(2))
+            {
+                return BadRequest("Email is Incorrect");
+            }
+            else if (result.Equals(0))
+            {
+                return Ok("Welcome to our website");
+            }
+            return BadRequest("Access Denied");
+        }
 
         [HttpPost("token")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TokenResponseModel))]
@@ -152,8 +152,7 @@ namespace TeacherWebApplication.Controllers
             {
                 Token = token,
                 Username = result.Username,
-                FirstName = result.FirstName,
-                LastName = result.LastName,
+                Name = result.Name,
                 Email = result.Email
             });
         }
@@ -169,7 +168,7 @@ namespace TeacherWebApplication.Controllers
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName)
+                new Claim(JwtRegisteredClaimNames.GivenName, user.Name)
             };
             for (int i = 0; i < 5; i++)
             {

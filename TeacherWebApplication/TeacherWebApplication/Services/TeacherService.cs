@@ -19,11 +19,9 @@ namespace TeacherWebApplication.Services
             {
                 Username = trqm.Username,
                 Email = trqm.Email,
-                FirstName = trqm.FirstName,
-                LastName = trqm.LastName,
+                Name = trqm.Name,
                 Password = trqm.Password,
                 PhoneNumber = trqm.PhoneNumber,
-                Qualifications = trqm.Qualifications,
             };
             if (teacher != null)
             {
@@ -36,8 +34,7 @@ namespace TeacherWebApplication.Services
                 Id= teacher.Id,
                 Username = teacher.Username,
                 Email = teacher.Email,
-                FirstName = teacher.FirstName,
-                LastName = teacher.LastName
+                Name = teacher.Name
             };
 
         }
@@ -48,7 +45,7 @@ namespace TeacherWebApplication.Services
             if (teacher != null)
             {
                 _db.TeacherTable.Remove(teacher);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
                 return true;
             }
             return false;
@@ -66,8 +63,7 @@ namespace TeacherWebApplication.Services
                     Id = teacher.Id,
                     Username = teacher.Username,
                     Email = teacher.Email,
-                    FirstName = teacher.FirstName,
-                    LastName = teacher.LastName
+                    Name = teacher.Name,
 
                 });
             }
@@ -87,8 +83,7 @@ namespace TeacherWebApplication.Services
                 {
                     Username = teacher.Username,
                     Email = teacher.Email,
-                    FirstName = teacher.FirstName,
-                    LastName = teacher.LastName,
+                    Name = teacher.Name,
                     Id = teacher.Id
                 };
             }

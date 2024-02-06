@@ -26,6 +26,16 @@ namespace TeacherWebApplication
 
             builder.Services.AddTransient<ITeacherService, TeacherService>();
 
+            builder.Services.AddCors(option =>
+            {
+                option.AddPolicy("pol", pol =>
+                {
+                    pol.AllowAnyHeader();
+                    pol.AllowAnyMethod();
+                    pol.AllowAnyOrigin();
+                });
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -36,6 +46,8 @@ namespace TeacherWebApplication
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("pol");
 
             app.UseAuthorization();
 
