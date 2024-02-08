@@ -4,9 +4,6 @@ namespace TeacherWebApplication.Models.RequestModels
 {
     public class TeacherRegisterModel
     {
-        [Required(ErrorMessage = "Username is required")]
-        [StringLength(50, ErrorMessage = "Username can't longer than 50 characters")]
-        public string Username { get; set; }
 
         //email address of user
         [Required(ErrorMessage = "Email is required")]
@@ -29,5 +26,7 @@ namespace TeacherWebApplication.Models.RequestModels
         [Required(ErrorMessage = "name is required")]
         [StringLength(40, ErrorMessage = "Must be less than 40 charecters")]
         public string Name { get; set; } = string.Empty;
+
+        public string Standard { get; set; }
     }
 }

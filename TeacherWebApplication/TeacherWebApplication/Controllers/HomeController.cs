@@ -87,32 +87,32 @@ namespace TeacherWebApplication.Controllers
             {
                 return BadRequest("User not fount");
             }
-            return Ok();
+            return Ok("Successfully Deleted");
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> LoginTeacher(TeacherLoginModel model)
-        {
-            TryValidateModel(model);
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var result = await _ts.LoginTeacher(model);
-            if (result.Equals(1))
-            {
-                return BadRequest("Password is Incorrect");
-            }
-            else if (result.Equals(2))
-            {
-                return BadRequest("Email is Incorrect");
-            }
-            else if (result.Equals(0))
-            {
-                return Ok("Welcome to our website");
-            }
-            return BadRequest("Access Denied");
-        }
+        //[HttpPost("login")]
+        //public async Task<IActionResult> LoginTeacher(TeacherLoginModel model)
+        //{
+        //    TryValidateModel(model);
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+        //    var result = await _ts.LoginTeacher(model);
+        //    if (result.Equals(1))
+        //    {
+        //        return BadRequest("Password is Incorrect");
+        //    }
+        //    else if (result.Equals(2))
+        //    {
+        //        return BadRequest("Email is Incorrect");
+        //    }
+        //    else if (result.Equals(0))
+        //    {
+        //        return Ok("Welcome to our website");
+        //    }
+        //    return BadRequest("Access Denied");
+        //}
 
         [HttpPost("token")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TokenResponseModel))]
@@ -151,9 +151,11 @@ namespace TeacherWebApplication.Controllers
             return Ok(new TokenResponseModel
             {
                 Token = token,
-                Username = result.Username,
                 Name = result.Name,
-                Email = result.Email
+                Email = result.Email,
+                Role = result.Role,
+                Standard=result.Standard,
+                PhoneNumber=result.PhoneNumber
             });
         }
         [NonAction]
@@ -164,7 +166,6 @@ namespace TeacherWebApplication.Controllers
             var secretKey = _configuration.GetValue<string>("jwt:SecretKey");
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Name, user.Username),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),

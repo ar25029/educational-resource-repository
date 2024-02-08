@@ -8,11 +8,6 @@ namespace TeacherWebApplication.Models.EntityModels
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        //username of teacher
-        [Required(ErrorMessage = "Username is required")]
-        [StringLength(50, ErrorMessage = "Username can't longer than 50 characters")]
-        public string Username { get; set; }
-
         //email address of user
         [Required(ErrorMessage = "Email is required")]
         [StringLength(50, ErrorMessage = "Length must be less than 50 characters")]
@@ -37,5 +32,7 @@ namespace TeacherWebApplication.Models.EntityModels
         [Required(ErrorMessage = "name is required")]
         [StringLength(40, ErrorMessage = "Must be less than 40 charecters")]
         public string Name { get; set; } = string.Empty;
+
+        public string Standard { get; set; }
     }
 }

@@ -17,11 +17,12 @@ namespace TeacherWebApplication.Services
         {
             Teacher teacher = new Teacher()
             {
-                Username = trqm.Username,
                 Email = trqm.Email,
                 Name = trqm.Name,
                 Password = trqm.Password,
                 PhoneNumber = trqm.PhoneNumber,
+                Standard=trqm.Standard,
+                Role= "Teacher"
             };
             if (teacher != null)
             {
@@ -32,9 +33,11 @@ namespace TeacherWebApplication.Services
             return new TeacherResponseModel
             {
                 Id= teacher.Id,
-                Username = teacher.Username,
                 Email = teacher.Email,
-                Name = teacher.Name
+                Name = teacher.Name,
+                Standard=teacher.Standard,
+                Role = teacher.Role,
+                PhoneNumber=teacher.PhoneNumber
             };
 
         }
@@ -61,9 +64,11 @@ namespace TeacherWebApplication.Services
                 listModel.Add(new TeacherResponseModel
                 {
                     Id = teacher.Id,
-                    Username = teacher.Username,
                     Email = teacher.Email,
                     Name = teacher.Name,
+                    Standard=teacher.Standard,
+                    Role = teacher.Role,
+                    PhoneNumber=teacher.PhoneNumber
 
                 });
             }
@@ -81,10 +86,12 @@ namespace TeacherWebApplication.Services
             {
                 return new TeacherResponseModel
                 {
-                    Username = teacher.Username,
                     Email = teacher.Email,
                     Name = teacher.Name,
-                    Id = teacher.Id
+                    Id = teacher.Id,
+                    Standard = teacher.Standard,
+                    Role = teacher.Role,
+                    PhoneNumber = teacher.PhoneNumber
                 };
             }
             return null;
@@ -109,10 +116,6 @@ namespace TeacherWebApplication.Services
             }
             if(trqm != null)
             {
-                if(trqm.Username != teacher.Username)
-                {
-                    teacher.Username = trqm.Username;
-                }
                 if(trqm.Email != teacher.Email)
                 {
                     teacher.Email = trqm.Email;
