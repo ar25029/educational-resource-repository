@@ -154,7 +154,46 @@ namespace FileHandling.Controllers
                             StatusCode = 1,
                             Message = "Pdf Retrieved Successfully",
                             PdfName = pdf.ResourceName,
+                            Standard = pdf.Standard,
                             PdfContent = result.Item2,
+                            ContentType = result.Item3
+                        };
+                        pdfResults.Add(pdfResult);
+                    }
+                }
+
+                return Ok(pdfResults);
+            }
+
+            status.StatusCode = 0;
+            status.Message = "No PDFs found";
+            return NotFound(status);
+        }
+
+
+        [HttpPost("Pdf/Standard/{std}")]
+        public async Task<IActionResult> GetAllPdfs(int std)
+        {
+            var status = new Status();
+            var pdfs = _productRepo.GetPdfByStandard(std);
+
+            if (pdfs != null && pdfs.Any())
+            {
+                var pdfResults = new List<FileResponseModel>();
+
+                foreach (var pdf in pdfs)
+                {
+                    var result = _fileService.GetPdf(pdf.ResourcePdf);
+
+                    if (result.Item1 == 1)
+                    {
+                        var pdfResult = new FileResponseModel
+                        {
+                            StatusCode = 1,
+                            Message = "Pdf Retrieved Successfully",
+                            PdfName = pdf.ResourceName,
+                            PdfContent = result.Item2,
+                            Standard = pdf.Standard,
                             ContentType = result.Item3
                         };
                         pdfResults.Add(pdfResult);

@@ -104,5 +104,21 @@ namespace FileHandling.Repository.Implementation.Pdfs
         {
             return _context.Pdfs.ToList();
         }
+
+
+        public List<Pdf> GetPdfByStandard(int std)
+        {
+            List<Pdf> list = _context.Pdfs.ToList();
+            List<Pdf> temp = new List<Pdf>();
+
+            foreach (var product in list)
+            {
+                if (product.Standard == std)
+                {
+                    temp.Add(product);
+                }
+            }
+            return temp;
+        }
     }
 }

@@ -6,6 +6,8 @@
         public string Message { get; set; }
 
         public string PdfName { get; set; }
+
+        public int? Standard {  get; set; }
         public byte[] PdfContent { get; set; }
         public string ContentType { get; set; }
     }

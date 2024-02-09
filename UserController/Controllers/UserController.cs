@@ -134,6 +134,7 @@ namespace UserController.Controllers
             {
                 Token = token,
                 Username = result.Username,
+                Standard = result.Standard,
                 Id = result.Id,
                 Email = result.Email
             });

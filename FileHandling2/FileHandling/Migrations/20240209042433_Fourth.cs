@@ -5,23 +5,25 @@
 namespace FileHandling.Migrations
 {
     /// <inheritdoc />
-    public partial class Second : Migration
+    public partial class Fourth : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Images",
+                name: "Pdfs",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ResourceName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ResourceImage = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ResourceCategory = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Standard = table.Column<int>(type: "int", nullable: false),
+                    ResourcePdf = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Images", x => x.Id);
+                    table.PrimaryKey("PK_Pdfs", x => x.Id);
                 });
         }
 
@@ -29,7 +31,7 @@ namespace FileHandling.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Images");
+                name: "Pdfs");
         }
     }
 }

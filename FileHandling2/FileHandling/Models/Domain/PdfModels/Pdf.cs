@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace FileHandling.Models.Domain.Pdf
 {
@@ -10,6 +11,12 @@ namespace FileHandling.Models.Domain.Pdf
 
         [Required]
         public string? ResourceName { get; set; }
+
+        [DefaultValue("PDF")]
+        public string? ResourceCategory { get; set; }
+
+        [Required]
+        public int? Standard {  get; set; }
 
         public string? ResourcePdf { get; set; }
 

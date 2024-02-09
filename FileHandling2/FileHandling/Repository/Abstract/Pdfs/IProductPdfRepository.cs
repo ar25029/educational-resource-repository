@@ -14,5 +14,6 @@ namespace FileHandling.Repository.Abstract.Pdfs
         public Pdf GetPdf(string name);
 
         public List<Pdf> GetAllPdfs();
+        public List<Pdf> GetPdfByStandard(int standard);
     }
 }
