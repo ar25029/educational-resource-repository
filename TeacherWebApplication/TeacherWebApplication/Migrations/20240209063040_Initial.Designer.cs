@@ -11,8 +11,8 @@ using TeacherWebApplication.Data;
 namespace TeacherWebApplication.Migrations
 {
     [DbContext(typeof(TeacherDbContext))]
-    [Migration("20240206110053_initial")]
-    partial class initial
+    [Migration("20240209063040_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,10 +57,9 @@ namespace TeacherWebApplication.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("Username")
+                    b.Property<string>("Standard")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

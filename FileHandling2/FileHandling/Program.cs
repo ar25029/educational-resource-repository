@@ -56,6 +56,19 @@ namespace FileHandling
             builder.Services.AddTransient<IVideoService, VideoService>();
             builder.Services.AddTransient<IProductVideoRepository, ProductVideoRepository>();
 
+            builder.Services.AddCors(
+              pol =>
+              {
+                  pol.AddPolicy("pol", pol =>
+                  {
+                      pol.AllowAnyHeader();
+                      pol.AllowAnyMethod();
+                      //pol.AllowAnyOrigin();
+                      pol.WithOrigins("http://localhost:3000");
+                      
+                  });
+              });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -66,6 +79,8 @@ namespace FileHandling
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("pol");
 
             app.UseAuthorization();
 

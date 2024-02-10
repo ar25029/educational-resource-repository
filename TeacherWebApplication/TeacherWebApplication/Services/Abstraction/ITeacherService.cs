@@ -13,6 +13,5 @@ namespace TeacherWebApplication.Services
         public Task<bool> DeleteTeacher(int id);
         public Task<Teacher> LoginTeacher(TeacherLoginModel tlm);
 
-        public Task<string> ForgetPassword(ForgetPasswordRequest forgetPassword);
     }
 }

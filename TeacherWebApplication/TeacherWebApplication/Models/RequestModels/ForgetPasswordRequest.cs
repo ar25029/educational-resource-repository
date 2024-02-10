@@ -6,7 +6,7 @@ namespace TeacherWebApplication.Models.RequestModels
     {
         [Required(ErrorMessage = "Username is required")]
         [StringLength(50, ErrorMessage = "Username cannot longer than 50 characters")]
-        public string Username { get; set; }
+        public string Name { get; set; }
 
         [Required(ErrorMessage = "Email is required")]
         [StringLength(50, ErrorMessage = "Length must be less than 50 characters")]

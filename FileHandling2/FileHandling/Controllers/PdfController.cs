@@ -101,15 +101,8 @@ namespace FileHandling.Controllers
 
                 if(result.Item1 == 1)
                 {
-                    var pdfResult = new FileResponseModel
-                    {
-                        StatusCode = 1,
-                        Message = "Pdf Retrieved Successfully",
-                        PdfName = pdf.ResourceName,
-                        PdfContent = result.Item2,
-                        ContentType = result.Item3
-                    };
-                    return Ok(pdfResult);
+                    
+                    return File(result.Item2, result.Item3);
                 }
             }
 
@@ -154,6 +147,7 @@ namespace FileHandling.Controllers
                             StatusCode = 1,
                             Message = "Pdf Retrieved Successfully",
                             PdfName = pdf.ResourceName,
+                            Category = pdf.ResourceCategory,
                             Standard = pdf.Standard,
                             PdfContent = result.Item2,
                             ContentType = result.Item3
@@ -192,6 +186,7 @@ namespace FileHandling.Controllers
                             StatusCode = 1,
                             Message = "Pdf Retrieved Successfully",
                             PdfName = pdf.ResourceName,
+                            Category = pdf.ResourceCategory,                       
                             PdfContent = result.Item2,
                             Standard = pdf.Standard,
                             ContentType = result.Item3

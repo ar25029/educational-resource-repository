@@ -27,6 +27,6 @@ namespace TeacherWebApplication.Models.RequestModels
         [StringLength(40, ErrorMessage = "Must be less than 40 charecters")]
         public string Name { get; set; } = string.Empty;
 
-        public string Standard { get; set; }
+        public int Standard { get; set; }
     }
 }

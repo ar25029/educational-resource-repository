@@ -7,6 +7,8 @@
 
         public string PdfName { get; set; }
 
+        public string Category { get; set; }
+
         public int? Standard {  get; set; }
         public byte[] PdfContent { get; set; }
         public string ContentType { get; set; }

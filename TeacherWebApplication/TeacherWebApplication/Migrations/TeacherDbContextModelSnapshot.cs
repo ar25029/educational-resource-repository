@@ -54,9 +54,8 @@ namespace TeacherWebApplication.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("Standard")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Standard")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
