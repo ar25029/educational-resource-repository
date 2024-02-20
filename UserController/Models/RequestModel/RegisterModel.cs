@@ -34,7 +34,6 @@ namespace UserController.Models.RequestModel
 
         public int Roll { get; set; }
         
-        [DefaultValue("MM-DD-YYYY")]
-        public string DOB { get; set; } 
+        public DateTime DOB { get; set; } 
     }
 }

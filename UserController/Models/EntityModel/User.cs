@@ -38,7 +38,7 @@ namespace UserController.Models.EntityModel
         [Required(ErrorMessage = "Roll number should be given")]
         public int Roll { get; set; }
 
-        [DefaultValue("MM-DD-YYYY")]
-        public string DOB { get; set; }
+      
+        public DateTime DOB { get; set; }
     }
 }

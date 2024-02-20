@@ -15,6 +15,10 @@ namespace FileHandling.Models.Domain.Pdf
         [DefaultValue("PDF")]
         public string? ResourceCategory { get; set; }
 
+        public string Description { get; set; }
+
+        public DateTime ? CreatedDate { get; set; } 
+
         [Required]
         public int? Standard {  get; set; }
 

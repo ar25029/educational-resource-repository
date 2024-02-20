@@ -148,6 +148,8 @@ namespace FileHandling.Controllers
                             Message = "Pdf Retrieved Successfully",
                             PdfName = pdf.ResourceName,
                             Category = pdf.ResourceCategory,
+                            Description = pdf.Description,
+                            DateCreated = pdf.CreatedDate,
                             Standard = pdf.Standard,
                             PdfContent = result.Item2,
                             ContentType = result.Item3
@@ -186,7 +188,9 @@ namespace FileHandling.Controllers
                             StatusCode = 1,
                             Message = "Pdf Retrieved Successfully",
                             PdfName = pdf.ResourceName,
-                            Category = pdf.ResourceCategory,                       
+                            Category = pdf.ResourceCategory, 
+                            Description = pdf.Description,
+                            DateCreated = pdf.CreatedDate,
                             PdfContent = result.Item2,
                             Standard = pdf.Standard,
                             ContentType = result.Item3

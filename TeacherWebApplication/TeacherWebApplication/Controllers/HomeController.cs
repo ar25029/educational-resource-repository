@@ -47,7 +47,7 @@ namespace TeacherWebApplication.Controllers
             var result = await _ts.CreateTeacher(model);
             if (result == null)
             {
-                return BadRequest("Failed to Register");
+                return BadRequest("Username already exists try using another username");
             }
             return Ok(result);
         }

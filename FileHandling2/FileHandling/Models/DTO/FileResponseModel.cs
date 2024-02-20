@@ -9,6 +9,9 @@
 
         public string Category { get; set; }
 
+        public string Description { get; set; }
+        public DateTime? DateCreated { get; set; }
+
         public int? Standard {  get; set; }
         public byte[] PdfContent { get; set; }
         public string ContentType { get; set; }

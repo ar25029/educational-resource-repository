@@ -50,7 +50,7 @@ namespace UserController.Controllers
 
             if (result == null)
             {
-                return BadRequest("Failed to create User");
+                return BadRequest("Username already exists try giving different username");
             }
             return Ok(result);
         }
