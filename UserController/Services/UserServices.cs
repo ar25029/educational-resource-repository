@@ -36,7 +36,8 @@ namespace UserController.Services
                 Role = "User",
                 Standard = model.Standard,
                 Roll = model.Roll,
-                DOB = model.DOB
+                DOB = model.DOB,
+                Flag = true,
             };
 
             if (user != null)
@@ -69,14 +70,47 @@ namespace UserController.Services
         }
 
 
+        public async Task<List<User>> GetAllByStd(int std)
+        {
+            List<User> users = await  _db.Users.ToListAsync();
+            List<User> all = new List<User>();
+            foreach (User user in users)
+            {
+                if(user.Standard == std )
+                {
+                    all.Add(user);
+                }
+            }
+            return all;
+        } 
+        
+        public async Task<List<User>> GetActiveStdentsByStd(int std)
+        {
+            List<User> users = await  _db.Users.ToListAsync();
+            List<User> all = new List<User>();
+            foreach (User user in users)
+            {
+                if(user.Standard == std )
+                {
+                    all.Add(user);
+                }
+            }
+            return all;
+        }
+
+
+
+
         public async Task<bool> Deleteuser(int id)
         {
             User user = await _db.Users.FindAsync(id);
 
             if (user != null)
             {
-                _db.Users.Remove(user);
-                _db.SaveChangesAsync();
+                //_db.Users.Remove(user);
+                //_db.SaveChangesAsync();
+                user.Flag = false;
+                await _db.SaveChangesAsync();
                 return true;
             }
             return false;
@@ -88,6 +122,25 @@ namespace UserController.Services
             if (allUsers.Count > 0) { return allUsers; }
             return null;
         }
+
+        public async Task<List<User>> GetAllActiveUsers()
+        {
+            List<User> allUsers = await _db.Users.ToListAsync();
+            List<User> all = new List<User>();
+            if (allUsers.Count > 0) 
+            {
+                foreach (User item in allUsers)
+                {
+                    if(item.Flag == true)
+                    {
+                       all.Add(item);
+                    }
+                }
+                return all;
+            }
+            return null;
+        }
+
 
         public async Task<User> UpdateUser(User demoUser)
         {
@@ -135,34 +188,17 @@ namespace UserController.Services
 
             var user = _db.Users.FirstOrDefault(u => u.Email == model.Email && u.Password == model.Password);
 
-            if(user != null)
+            if (user.Flag == false)
+            {
+                return null;
+            }
+            else if (user != null)
             {
                 return user;
             }
             return null;
-
-            //foreach (var item in _user)
-            //{
-            //    if (item.Email == model.Email)
-            //    {
-            //        if (item.Password != model.Password)
-            //        {
-            //            return 2;
-            //        }
-
-            //    }
-            //    else if (item.Password == model.Password)
-            //    {
-            //        if (item.Email != model.Email)
-            //        {
-            //            return 1;
-            //        }
-            //    }
-
-            //}
-            //return 3;
         }
 
-
+       
     }
 }

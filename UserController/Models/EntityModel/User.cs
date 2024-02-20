@@ -40,5 +40,8 @@ namespace UserController.Models.EntityModel
 
       
         public DateTime DOB { get; set; }
+
+        [DefaultValue(true)]
+        public Boolean Flag { get; set; }
     }
 }

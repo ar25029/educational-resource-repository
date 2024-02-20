@@ -34,6 +34,8 @@ namespace UserController.Models.RequestModel
 
         public int Roll { get; set; }
         
-        public DateTime DOB { get; set; } 
+        public DateTime DOB { get; set; }
+
+   
     }
 }

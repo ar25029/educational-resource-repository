@@ -32,10 +32,49 @@ namespace UserController.Controllers
             var result = await _userServices.GetAllUsers();
             if (result == null)
             {
-                return BadRequest("The Recoed is empty.");
+                return BadRequest("The Record is empty.");
             }
             return Ok(result);
         }
+
+
+        [HttpGet("GetAllActiveUser")]
+        public async Task<IActionResult> GetAllActive()
+        {
+            var result = await _userServices.GetAllActiveUsers();
+            if (result == null)
+            {
+                return BadRequest("The Record is empty.");
+            }
+            return Ok(result);
+        }
+
+
+
+        [HttpPost("GetByStd/{std}")]
+        public async Task<IActionResult> GetByStd(int std)
+        {
+            var result = await _userServices.GetAllByStd(std);
+            if (result == null)
+            {
+                return BadRequest("The Record is empty.");
+            }
+            return Ok(result);
+        }
+
+
+        [HttpPost("GetActiveByStd/{std}")]
+        public async Task<IActionResult> GetActiveByStd(int std)
+        {
+            var result = await _userServices.GetActiveStdentsByStd(std);
+            if (result == null)
+            {
+                return BadRequest("The Record is empty.");
+            }
+            return Ok(result);
+        }
+
+
 
 
         [HttpPost("Register")]

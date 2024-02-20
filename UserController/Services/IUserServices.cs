@@ -12,6 +12,11 @@ namespace UserController.Services
         public Task<bool> Deleteuser(int id);
         public Task<List<User>> GetAllUsers();
 
+        public Task<List<User>> GetAllActiveUsers();
+        public Task<List<User>> GetAllByStd(int std);
+
+        public Task<List<User>> GetActiveStdentsByStd(int std);
+
         public Task<User> LoginUser(LoginModel model);
 
     }
