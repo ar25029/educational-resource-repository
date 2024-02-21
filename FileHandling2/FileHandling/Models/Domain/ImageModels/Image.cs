@@ -11,6 +11,17 @@ namespace FileHandling.Models.Domain.ImageModels
         [Required]
         public string? ResourceName { get; set; }
 
+        public int? Standard { get; set; }
+
+        public string? Category {  get; set; }
+
+        [Required]
+        public string? ResourceDescription { get; set; }
+
+
+        [Required]
+        public DateTime? DateCreated { get; set; }
+
         public string? ResourceImage { get; set; }
 
         [NotMapped]

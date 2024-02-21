@@ -39,7 +39,8 @@ namespace FileHandling.Repository.Implementation.Pdfs
                 {
                     if (product.ResourceName == name)
                     {
-                        _context.Pdfs.Remove(product);
+                        product.Flag = 0;
+                        //_context.Pdfs.Remove(product);
                         _context.SaveChanges();
                         return true;
 
@@ -85,7 +86,7 @@ namespace FileHandling.Repository.Implementation.Pdfs
             {
                 foreach (var product in list)
                 {
-                    if (product.ResourceName == name)
+                    if (product.ResourceName == name )
                     {
 
                         return product;
@@ -105,6 +106,19 @@ namespace FileHandling.Repository.Implementation.Pdfs
             return _context.Pdfs.ToList();
         }
 
+        public List<Pdf> GetAllPublishablePdfs(int std)
+        {
+            List<Pdf> list = _context.Pdfs.ToList();
+            List<Pdf> all = new List<Pdf>();
+            foreach (var product in list)
+            {
+                if(product.Standard == std && product.Flag == 2)
+                {
+                    all.Add(product);
+                }
+            }
+            return all;
+        }
 
         public List<Pdf> GetPdfByStandard(int std)
         {
@@ -113,12 +127,29 @@ namespace FileHandling.Repository.Implementation.Pdfs
 
             foreach (var product in list)
             {
-                if (product.Standard == std)
+                if (product.Standard == std && product.Flag == 1)
                 {
                     temp.Add(product);
                 }
             }
             return temp;
+        }
+
+        public int PublishPdf(string name, int std)
+        {
+            List<Pdf> list = _context.Pdfs.ToList();
+            DateTime date = DateTime.Now;
+            foreach (var item in list)
+            {
+                if(item.ResourceName == name && item.Standard == std)
+                {
+                    item.Flag = 1;
+                    item.DateCreated = date;
+                    _context.SaveChanges();
+                    return 1;
+                }
+            }
+            return 0;
         }
     }
 }

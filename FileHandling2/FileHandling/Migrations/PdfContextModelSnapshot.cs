@@ -30,14 +30,18 @@ namespace FileHandling.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
 
-                    b.Property<DateTime?>("CreatedDate")
+                    b.Property<DateTime?>("DateCreated")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Flag")
+                        .HasColumnType("int");
 
                     b.Property<string>("ResourceCategory")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ResourceDescription")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ResourceName")
@@ -50,6 +54,10 @@ namespace FileHandling.Migrations
                     b.Property<int?>("Standard")
                         .IsRequired()
                         .HasColumnType("int");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

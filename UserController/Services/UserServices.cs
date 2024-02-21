@@ -182,21 +182,39 @@ namespace UserController.Services
             return _user;
         }
 
-        public async Task<User> LoginUser(LoginModel model)
+        public async Task<int> LoginUser(LoginModel model)
         {
             var _user = await _db.Users.ToListAsync();
 
-            var user = _db.Users.FirstOrDefault(u => u.Email == model.Email && u.Password == model.Password);
+            //var user = _db.Users.FirstOrDefault(u => u.Email == model.Email && u.Password == model.Password);
 
-            if (user.Flag == false)
+            foreach (var user in _user)
             {
-                return null;
+
+                if (model.Email == user.Email && model.Password == user.Password && user.Flag == true)
+                {
+                    return 1;
+                }
+                else if(model.Email == user.Email)
+                {
+                    if(model.Password != user.Password)
+                    {
+                        return 2;
+                    }
+                }
             }
-            else if (user != null)
-            {
-                return user;
-            }
-            return null;
+            return 0;
+
+
+            //if (user.Flag == false)
+            //{
+            //    return 0;
+            //}
+            //else if (user != null)
+            //{
+            //    return user;
+            //}
+            //return null;
         }
 
        

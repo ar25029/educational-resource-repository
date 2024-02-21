@@ -15,16 +15,25 @@ namespace FileHandling.Models.Domain.Pdf
         [DefaultValue("PDF")]
         public string? ResourceCategory { get; set; }
 
-        public string Description { get; set; }
+        public string Subject { get; set; }
 
-        public DateTime ? CreatedDate { get; set; } 
+        [Required]
+        public string ? ResourceDescription { get; set; }
+
+        [Required]
+        public DateTime? DateCreated { get; set; }
 
         [Required]
         public int? Standard {  get; set; }
 
         public string? ResourcePdf { get; set; }
 
+        [DefaultValue(2)]
+        public int Flag { get; set; } 
+
         [NotMapped]
         public IFormFile PdfFile { get; set; }
+
+
     }
 }

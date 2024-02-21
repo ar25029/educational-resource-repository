@@ -58,25 +58,25 @@ namespace FileHandling.Repository.Implementation.Pdfs
 
         }
 
-        public bool DeletePdf(string pdfFileName)
-        {
-            try
-            {
-                var wwwPath = this._environment.ContentRootPath;
-                var path = Path.Combine(wwwPath, "uploads\\Pdf's", pdfFileName);
-                if (File.Exists(path))
-                {
+        //public bool DeletePdf(string pdfFileName)
+        //{
+        //    try
+        //    {
+        //        var wwwPath = this._environment.ContentRootPath;
+        //        var path = Path.Combine(wwwPath, "uploads\\Pdf's", pdfFileName);
+        //        if (File.Exists(path))
+        //        {
 
-                    File.Delete(path);
-                    return true;
-                }
-                return false;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
+        //            File.Delete(path);
+        //            return true;
+        //        }
+        //        return false;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return false;
+        //    }
+        //}
 
 
 
@@ -103,6 +103,9 @@ namespace FileHandling.Repository.Implementation.Pdfs
                     {
                         case ".pdf":
                             contentType = "application/pdf";
+                            break;
+                        case ".doc":
+                            contentType = "application/doc";
                             break;
 
                         default:

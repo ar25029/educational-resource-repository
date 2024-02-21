@@ -11,7 +11,7 @@ namespace TeacherWebApplication.Services
         public Task<TeacherResponseModel> GetTeacherById(int id);
         public Task<Teacher> UpdateTeacher(Teacher trqm);
         public Task<bool> DeleteTeacher(int id);
-        public Task<Teacher> LoginTeacher(TeacherLoginModel tlm);
+        public Task<int> LoginTeacher(TeacherLoginModel tlm);
 
     }
 }

@@ -7,7 +7,7 @@ namespace FileHandling.Repository.Abstract.Pdfs
     {
         public Tuple<int, string> SavePdf(IFormFile imageFile);
 
-        public bool DeletePdf(string pdfFileName);
+        //public bool DeletePdf(string pdfFileName);
         public Tuple<int, byte[], string> GetPdf(string fileName);
         
     }

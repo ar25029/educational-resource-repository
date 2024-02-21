@@ -18,11 +18,13 @@ namespace TeacherWebApplication.Controllers
     {
         private readonly ITeacherService _ts;
         private readonly IConfiguration _configuration;
+        private readonly TeacherDbContext _db;
 
-        public HomeController(ITeacherService teacherService, IConfiguration configuration)
+        public HomeController(ITeacherService teacherService, IConfiguration configuration, TeacherDbContext db)
         {
             _ts = teacherService;
             _configuration = configuration;
+            _db = db;
         }
 
         [HttpGet("getallteachers")]
@@ -44,6 +46,18 @@ namespace TeacherWebApplication.Controllers
             {
                 return BadRequest(ModelState);
             }
+
+
+            var list = _db.TeacherTable.ToList();
+            foreach (var teacher in list)
+            {
+                if (teacher.Email == model.Email)
+                {
+                    return BadRequest("Email already exists try giving another email.");
+                }
+            }
+
+
             var result = await _ts.CreateTeacher(model);
             if (result == null)
             {
@@ -90,30 +104,7 @@ namespace TeacherWebApplication.Controllers
             return Ok("Successfully Deleted");
         }
 
-        //[HttpPost("login")]
-        //public async Task<IActionResult> LoginTeacher(TeacherLoginModel model)
-        //{
-        //    TryValidateModel(model);
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-        //    var result = await _ts.LoginTeacher(model);
-        //    if (result.Equals(1))
-        //    {
-        //        return BadRequest("Password is Incorrect");
-        //    }
-        //    else if (result.Equals(2))
-        //    {
-        //        return BadRequest("Email is Incorrect");
-        //    }
-        //    else if (result.Equals(0))
-        //    {
-        //        return Ok("Welcome to our website");
-        //    }
-        //    return BadRequest("Access Denied");
-        //}
-
+        
         [HttpPost("token")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TokenResponseModel))]
         public async Task<ActionResult> Login(TeacherLoginModel model)
@@ -124,41 +115,31 @@ namespace TeacherWebApplication.Controllers
                 return Unauthorized(ModelState);
             }
 
+            var teacher = _db.TeacherTable.FirstOrDefault(u => u.Email == model.Email && u.Password == model.Password);
+
+
             var result = await _ts.LoginTeacher(model);
-            if (result == null)
+            if (result == 2)
             {
-                return Unauthorized("Invalid Username and Password");
+                return Unauthorized("Password doesnt match with the Email");
             }
-
-            if (model.Email == result.Email)
+            else if (result == 1)
             {
-                if (model.Password != result.Password)
+                string token = GenerateToken(teacher);
+
+                return Ok(new TokenResponseModel
                 {
-                    return Unauthorized("Wrong Password");
-                }
-
+                    Token = token,
+                    Name = teacher.Name,
+                    Standard = teacher.Standard,
+                    Id = teacher.Id,
+                    Email = teacher.Email
+                });
             }
-            else if (model.Password == result.Password)
-            {
-                if (model.Email != result.Email)
-                {
-                    return Unauthorized("Wrong Email");
-                }
-            }
-
-            string token = GenerateToken(result);
-
-            return Ok(new TokenResponseModel
-            {
-                Id = result.Id,
-                Token = token,
-                Name = result.Name,
-                Email = result.Email,
-                Role = result.Role,
-                Standard=result.Standard,
-                PhoneNumber=result.PhoneNumber
-            });
+            return BadRequest("Wrong Credentials");
+            
         }
+
         [NonAction]
         private string GenerateToken(Teacher user)
         {

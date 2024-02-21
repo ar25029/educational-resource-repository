@@ -1,9 +1,7 @@
-﻿using FileHandling.Models.Domain;
+﻿using FileHandling.Models.Domain.Pdf;
 using FileHandling.Models.Domain.VideoModels;
 using FileHandling.Models.DTO;
-using FileHandling.Repository.Abstract.Images;
 using FileHandling.Repository.Abstract.Videos;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FileHandling.Controllers
@@ -15,7 +13,7 @@ namespace FileHandling.Controllers
         private IVideoService _fileService = fileService;
         private IProductVideoRepository _productRepo = productRepo;
         [HttpPost]
-        public IActionResult AddImage([FromForm] Video model)
+        public IActionResult AddVideo([FromForm] Video model)
         {
             var status = new Status();
             if (!ModelState.IsValid)
@@ -30,6 +28,10 @@ namespace FileHandling.Controllers
                 if (fileResult.Item1 == 1)
                 {
                     model.ResourceVideo = fileResult.Item2; // getting name of image
+                }
+                else
+                {
+                    return BadRequest(fileResult);
                 }
                 var productResult = _productRepo.AddVideo(model);
                 if (productResult)
@@ -49,7 +51,9 @@ namespace FileHandling.Controllers
         }
 
 
-        [HttpDelete("productVideo/delete")]
+
+
+        [HttpDelete("delete")]
         public IActionResult DeleteVideo(string videoName)
         {
             var status = new Status();
@@ -66,12 +70,12 @@ namespace FileHandling.Controllers
 
             if (videoName != null)
             {
-                var fileResult = _fileService.DeleteVideo(Name);
-                if (fileResult != true)
-                {
-                    status.StatusCode = 1;
-                    status.Message = "Enter valid name";// getting name of image
-                }
+                //var fileResult = _fileService.DeleteVideo(Name);
+                //if (fileResult != true)
+                //{
+                //    status.StatusCode = 1;
+                //    status.Message = "Enter valid name";// getting name of image
+                //}
 
                 var productResult = _productRepo.DeleteVideo(videoName);
                 if (productResult)
@@ -90,7 +94,14 @@ namespace FileHandling.Controllers
         }
 
 
-        [HttpGet("get/video/{fileName}")]
+        
+
+
+
+
+
+
+        [HttpGet("get/{fileName}")]
         public IActionResult GetVideo(string fileName)
         {
             var status = new Status();
@@ -113,6 +124,149 @@ namespace FileHandling.Controllers
             }
         }
 
+
+        [HttpGet("getall")]
+        public async Task<IActionResult> GetAllVideos()
+        {
+            var status = new Status();
+            var videos = _productRepo.GetAllVideos();
+
+            if (videos != null && videos.Any())
+            {
+                var videoResults = new List<FileResponseModel>();
+
+                foreach (var video in videos)
+                {
+                    var result = _fileService.GetVideo(video.ResourceVideo);
+
+                    if (result.Item1 == 1)
+                    {
+                        var videoResult = new FileResponseModel
+                        {
+                            StatusCode = 1,
+                            Message = "Pdf Retrieved Successfully",
+                            PdfName = video.ResourceName,
+                            Category = video.ResourceCategory,
+                            Description = video.ResourceDescription,
+                            Subject = video.Subject,
+                            Created = video.DateCreated,
+                            Standard = video.Standard,
+                            PdfContent = result.Item2,
+                            ContentType = result.Item3
+                        };
+                        videoResults.Add(videoResult);
+                    }
+                }
+
+                return Ok(videoResults);
+            }
+
+            status.StatusCode = 0;
+            status.Message = "No Videos found";
+            return NotFound(status);
+        }
+
+
+
+        [HttpPost("Standard/{std}")]
+        public async Task<IActionResult> GetAllVideos(int std)
+        {
+            var status = new Status();
+            var videos = _productRepo.GetVideoByStandard(std);
+
+            if (videos != null && videos.Any())
+            {
+                var videoResults = new List<FileResponseModel>();
+
+                foreach (var video in videos)
+                {
+                    var result = _fileService.GetVideo(video.ResourceVideo);
+
+                    if (result.Item1 == 1)
+                    {
+                        var videoResult = new FileResponseModel
+                        {
+                            StatusCode = 1,
+                            Message = "Video Retrieved Successfully",
+                            PdfName = video.ResourceName,
+                            Category = video.ResourceCategory,
+                            Description = video.ResourceDescription,
+                            Subject = video.Subject,
+                            Created = video.DateCreated,
+                            Standard = video.Standard,
+                            PdfContent = result.Item2,                            
+                            ContentType = result.Item3
+                        };
+                        videoResults.Add(videoResult);
+                    }
+                }
+
+                return Ok(videoResults);
+            }
+
+            status.StatusCode = 0;
+            status.Message = "No Videos found";
+            return NotFound(status);
+        }
+
+
+        [HttpPost("Standard/Publishable/{std}")]
+        public async Task<IActionResult> GetAllPublishablePdfs(int std)
+        {
+            var status = new Status();
+            var videos = _productRepo.GetAllPublishableVideos(std);
+
+            if (videos != null && videos.Any())
+            {
+                var pdfResults = new List<FileResponseModel>();
+
+                foreach (var video in videos)
+                {
+                    var result = _fileService.GetVideo(video.ResourceVideo);
+
+                    if (result.Item1 == 1)
+                    {
+                        var pdfResult = new FileResponseModel
+                        {
+                            StatusCode = 1,
+                            Message = "Video Retrieved Successfully",
+                            PdfName = video.ResourceName,
+                            Category = video.ResourceCategory,
+                            Description = video.ResourceDescription,
+                            Subject = video.Subject,
+                            Created = video.DateCreated,
+                            Standard = video.Standard,
+                            PdfContent = result.Item2,
+                            ContentType = result.Item3
+                        };
+                        pdfResults.Add(pdfResult);
+                    }
+                }
+
+                return Ok(pdfResults);
+            }
+
+            status.StatusCode = 0;
+            status.Message = "No Videos found";
+            return NotFound(status);
+        }
+
+
+        [HttpPost("Publish")]
+        public async Task<IActionResult> PublishVideo(string name, int std)
+        {
+            Status status = new Status();
+            int stat = _productRepo.PublishVideo(name, std);
+            if (stat == 1)
+            {
+                status.StatusCode = 1;
+                status.Message = "File Published Successfully";
+                return Ok(status);
+            }
+            status.StatusCode = 0;
+            status.Message = "There is some issue while publishing";
+            return BadRequest(status);
+        }
 
     }
 }

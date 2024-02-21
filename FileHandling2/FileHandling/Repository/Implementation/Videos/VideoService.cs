@@ -60,25 +60,25 @@ namespace FileHandling.Repository.Implementation.Videos
 
 
 
-        public bool DeleteVideo(string videoFileName)
-        {
-            try
-            {
-                var wwwPath = _environment.ContentRootPath;
-                var path = Path.Combine(wwwPath, "uploads\\Videos", videoFileName);
-                if (File.Exists(path))
-                {
+        //public bool DeleteVideo(string videoFileName)
+        //{
+        //    try
+        //    {
+        //        var wwwPath = _environment.ContentRootPath;
+        //        var path = Path.Combine(wwwPath, "uploads\\Videos", videoFileName);
+        //        if (File.Exists(path))
+        //        {
 
-                    File.Delete(path);
-                    return true;
-                }
-                return false;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
+        //            File.Delete(path);
+        //            return true;
+        //        }
+        //        return false;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return false;
+        //    }
+        //}
 
 
         public Tuple<int, byte[], string> GetVideo(string fileName)

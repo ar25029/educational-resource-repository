@@ -4,7 +4,7 @@
     {
         public Tuple<int, string> SaveVideo(IFormFile imageFile);
 
-        public bool DeleteVideo(string videoFileName);
+        //public bool DeleteVideo(string videoFileName);
 
 
         public Tuple<int, byte[], string> GetVideo(string fileName);

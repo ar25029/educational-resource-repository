@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "DDLw3gNSq64B0aK72M/Y9T95NP3dfNY6R0G+3MV8Wc9dlMM3E5u99Ij/NkV8Wj+qRAkSUzU4ukieNgk7UKY9gg==",
+  "dgSpecHash": "nVav7O0T0GrTpTGqYDfv8jT8V0afU+hnDdVxCe+/Kg+v+yVQMS99Eja32gaMXl+9SODq+SR9383zoqO2rj35pw==",
   "success": true,
-  "projectFilePath": "D:\\24167_Suraj_Shinde\\C#\\practise\\FileHandling\\educational-resource-repository\\FileHandling2\\FileHandling\\FileHandling.csproj",
+  "projectFilePath": "D:\\24167_Suraj_Shinde\\C#\\practise\\FileHandling2\\FileHandling\\FileHandling.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\suraj.shinde\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\suraj.shinde\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",

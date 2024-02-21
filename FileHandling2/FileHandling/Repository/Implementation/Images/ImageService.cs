@@ -22,14 +22,13 @@ namespace FileHandling.Repository.Implementation.Images
 
                 var path = Path.Combine(contentPath, "uploads");
                 var ext = Path.GetExtension(imageFile.FileName);
-                if (ext == ".jpg" || ext == ".png" || ext == ".jpeg")
-                {
-                    path = Path.Combine(contentPath, "uploads\\Images");
+                
+                    path = Path.Combine(contentPath, "uploads\\files");
                     if (!Directory.Exists(path))
                     {
                         Directory.CreateDirectory(path);
                     }
-                }
+                
                 //else if (ext == ".pdf" || ext == ".doc")
                 //{
                 //    path = Path.Combine(contentPath, "uploads\\Pdf's");
@@ -42,7 +41,7 @@ namespace FileHandling.Repository.Implementation.Images
 
                 //Check the allowed extensions
 
-                var allowedExtensions = new string[] { ".jpg", ".png", ".jpeg", ".gif "/*,".pdf", ".doc", ".mp4" ,".mpeg"*/};
+                var allowedExtensions = new string[] { ".jpg", ".png", ".jpeg", ".gif ", ".pdf", ".doc", ".mp4", ".mpeg" };
                 if (!allowedExtensions.Contains(ext))
                 {
                     string msg = string.Format("Only {0} extensions are allowed", string.Join(",", allowedExtensions));
@@ -71,7 +70,7 @@ namespace FileHandling.Repository.Implementation.Images
             try
             {
                 var wwwPath = _environment.ContentRootPath;
-                var path = Path.Combine(wwwPath, "uploads\\Images", imageFileName);
+                var path = Path.Combine(wwwPath, "uploads\\files", imageFileName);
                 if (File.Exists(path))
                 {
 
@@ -102,7 +101,7 @@ namespace FileHandling.Repository.Implementation.Images
 
 
 
-                var path = Path.Combine(wwwPath, "uploads\\Images", fileName);
+                var path = Path.Combine(wwwPath, "uploads\\files", fileName);
 
                 if (File.Exists(path))
                 {
@@ -127,6 +126,18 @@ namespace FileHandling.Repository.Implementation.Images
                             break;
                         case ".svg":
                             contentType = "image/svg+xml";
+                            break;
+                        case ".pdf":
+                            contentType = "application/pdf";
+                            break;
+                        case ".doc":
+                            contentType = "application/doc";
+                            break;
+                        case ".mp4":
+                            contentType = "video/mp4";
+                            break;
+                        case ".mpeg":
+                            contentType = "video/mpeg";
                             break;
 
                         default:
@@ -154,61 +165,7 @@ namespace FileHandling.Repository.Implementation.Images
        
 
 
-        //public List<Tuple<int, byte[], string>> GetAllImages()
-        //{
-        //    List<Tuple<int, byte[], string>> imagesList = new List<Tuple<int, byte[], string>>();
-        //    try
-        //    {
-        //        var wwwPath = this._environment.ContentRootPath;
-
-        //        var directoryPath = Path.Combine(wwwPath, "uploads\\Images");
-
-        //        if (Directory.Exists(directoryPath))
-        //        {
-        //            var imageFiles = Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories)
-        //                                      .Where(s => s.EndsWith(".jpg") || s.EndsWith(".jpeg") || s.EndsWith(".png") || s.EndsWith(".gif") || s.EndsWith(".bmp") || s.EndsWith(".svg"))
-        //                                      .ToList();
-
-        //            foreach (var imagePath in imageFiles)
-        //            {
-        //                var fileName = Path.GetFileName(imagePath);
-        //                var fileBytes = System.IO.File.ReadAllBytes(imagePath);
-
-        //                // Determine the content type based on the file extension
-        //                string contentType;
-        //                switch (Path.GetExtension(fileName).ToLower().Trim())
-        //                {
-        //                    case ".jpg":
-        //                    case ".jpeg":
-        //                        contentType = "image/jpeg";
-        //                        break;
-        //                    case ".png":
-        //                        contentType = "image/png";
-        //                        break;
-        //                    case ".gif":
-        //                        contentType = "image/gif";
-        //                        break;
-        //                    case ".bmp":
-        //                        contentType = "image/bmp";
-        //                        break;
-        //                    case ".svg":
-        //                        contentType = "image/svg+xml";
-        //                        break;
-        //                    default:
-        //                        contentType = "application/octet-stream";
-        //                        break;
-        //                }
-
-        //                imagesList.Add(new Tuple<int, byte[], string>(1, fileBytes, contentType));
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Log or handle the exception as required
-        //    }
-        //    return imagesList;
-        //}
+        
     }
 
 }

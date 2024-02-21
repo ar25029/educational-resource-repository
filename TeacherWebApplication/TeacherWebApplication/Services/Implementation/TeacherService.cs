@@ -109,14 +109,27 @@ namespace TeacherWebApplication.Services
             return null;
         }
 
-        public async Task<Teacher> LoginTeacher(TeacherLoginModel tlm)
+        public async Task<int> LoginTeacher(TeacherLoginModel tlm)
         {
-            var user = _db.TeacherTable.FirstOrDefault(u => u.Email == tlm.Email && u.Password == tlm.Password);
-            if (user != null)
+            var _teacher = await _db.TeacherTable.ToListAsync();
+            //var user = _db.TeacherTable.FirstOrDefault(u => u.Email == tlm.Email && u.Password == tlm.Password);
+            foreach (var teacher in _teacher)
             {
-                return user;
+                if (tlm.Email == teacher.Email && tlm.Password == teacher.Password )
+                {
+                    return 1;
+                }
+                else if (tlm.Email == teacher.Email)
+                {
+                    if (tlm.Password != teacher.Password)
+                    {
+                        return 2;
+                    }
+                }
+               
             }
-            return null;
+            return 0;
+
         }
 
         public async Task<Teacher> UpdateTeacher(Teacher trqm)

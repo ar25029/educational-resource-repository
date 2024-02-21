@@ -31,6 +31,10 @@ namespace FileHandling.Controllers
                 {
                     model.ResourcePdf = fileResult.Item2; // getting name of image
                 }
+                else
+                {
+                    return BadRequest(fileResult);
+                }
                 var productResult = _productRepo.AddPdf(model);
                 if (productResult)
                 {
@@ -49,7 +53,7 @@ namespace FileHandling.Controllers
         }
 
 
-        [HttpDelete("productPdf/delete")]
+        [HttpDelete("productPdf/delete/{pdfName}")]
         public IActionResult DeletePdf(string pdfName)
         {
             var status = new Status();
@@ -66,12 +70,12 @@ namespace FileHandling.Controllers
 
             if (pdfName != null)
             {
-                var fileResult = _fileService.DeletePdf(Name);
-                if (fileResult != true)
-                {
-                    status.StatusCode = 1;
-                    status.Message = "Enter valid name";// getting name of image
-                }
+                //var fileResult = _fileService.DeletePdf(Name);
+                //if (fileResult != true)
+                //{
+                //    status.StatusCode = 0;
+                //    status.Message = "Enter valid name";// getting name of image
+                //}
 
                 var productResult = _productRepo.DeletePdf(pdfName);
                 if (productResult)
@@ -148,8 +152,9 @@ namespace FileHandling.Controllers
                             Message = "Pdf Retrieved Successfully",
                             PdfName = pdf.ResourceName,
                             Category = pdf.ResourceCategory,
-                            Description = pdf.Description,
-                            DateCreated = pdf.CreatedDate,
+                            Description = pdf.ResourceDescription,
+                            Subject = pdf.Subject,
+                            Created = pdf.DateCreated,
                             Standard = pdf.Standard,
                             PdfContent = result.Item2,
                             ContentType = result.Item3
@@ -165,6 +170,10 @@ namespace FileHandling.Controllers
             status.Message = "No PDFs found";
             return NotFound(status);
         }
+
+
+
+
 
 
         [HttpPost("Pdf/Standard/{std}")]
@@ -188,11 +197,12 @@ namespace FileHandling.Controllers
                             StatusCode = 1,
                             Message = "Pdf Retrieved Successfully",
                             PdfName = pdf.ResourceName,
-                            Category = pdf.ResourceCategory, 
-                            Description = pdf.Description,
-                            DateCreated = pdf.CreatedDate,
-                            PdfContent = result.Item2,
+                            Category = pdf.ResourceCategory,
+                            Description = pdf.ResourceDescription,
+                            Subject = pdf.Subject,
+                            Created = pdf.DateCreated,
                             Standard = pdf.Standard,
+                            PdfContent = result.Item2,
                             ContentType = result.Item3
                         };
                         pdfResults.Add(pdfResult);
@@ -205,6 +215,67 @@ namespace FileHandling.Controllers
             status.StatusCode = 0;
             status.Message = "No PDFs found";
             return NotFound(status);
+        }
+
+
+
+
+        [HttpPost("Pdf/Standard/Publishable/{std}")]
+        public async Task<IActionResult> GetAllPublishablePdfs(int std)
+        {
+            var status = new Status();
+            var pdfs = _productRepo.GetAllPublishablePdfs(std);
+
+            if (pdfs != null && pdfs.Any())
+            {
+                var pdfResults = new List<FileResponseModel>();
+
+                foreach (var pdf in pdfs)
+                {
+                    var result = _fileService.GetPdf(pdf.ResourcePdf);
+
+                    if (result.Item1 == 1)
+                    {
+                        var pdfResult = new FileResponseModel
+                        {
+                            StatusCode = 1,
+                            Message = "Pdf Retrieved Successfully",
+                            PdfName = pdf.ResourceName,
+                            Category = pdf.ResourceCategory,
+                            Description = pdf.ResourceDescription,
+                            Subject = pdf.Subject,
+                            Created = pdf.DateCreated,
+                            Standard = pdf.Standard,
+                            PdfContent = result.Item2,
+                            ContentType = result.Item3
+                        };
+                        pdfResults.Add(pdfResult);
+                    }
+                }
+
+                return Ok(pdfResults);
+            }
+
+            status.StatusCode = 0;
+            status.Message = "No PDFs found";
+            return NotFound(status);
+        }
+
+
+        [HttpPost("Publish")]
+        public async Task<IActionResult> PublishPdf(string name, int std)
+        {
+            Status status = new Status();   
+            int stat = _productRepo.PublishPdf(name, std);
+            if(stat == 1)
+            {
+                status.StatusCode = 1;
+                status.Message = "File Published Successfully";
+                return Ok(status);
+            }
+            status.StatusCode = 0;
+            status.Message = "There is some issue while publishing";
+            return BadRequest(status);
         }
     }
 }

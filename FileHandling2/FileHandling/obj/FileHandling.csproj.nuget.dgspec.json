@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\24167_Suraj_Shinde\\C#\\practise\\FileHandling\\educational-resource-repository\\FileHandling2\\FileHandling\\FileHandling.csproj": {}
+    "D:\\24167_Suraj_Shinde\\C#\\practise\\FileHandling2\\FileHandling\\FileHandling.csproj": {}
   },
   "projects": {
-    "D:\\24167_Suraj_Shinde\\C#\\practise\\FileHandling\\educational-resource-repository\\FileHandling2\\FileHandling\\FileHandling.csproj": {
+    "D:\\24167_Suraj_Shinde\\C#\\practise\\FileHandling2\\FileHandling\\FileHandling.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\24167_Suraj_Shinde\\C#\\practise\\FileHandling\\educational-resource-repository\\FileHandling2\\FileHandling\\FileHandling.csproj",
+        "projectUniqueName": "D:\\24167_Suraj_Shinde\\C#\\practise\\FileHandling2\\FileHandling\\FileHandling.csproj",
         "projectName": "FileHandling",
-        "projectPath": "D:\\24167_Suraj_Shinde\\C#\\practise\\FileHandling\\educational-resource-repository\\FileHandling2\\FileHandling\\FileHandling.csproj",
+        "projectPath": "D:\\24167_Suraj_Shinde\\C#\\practise\\FileHandling2\\FileHandling\\FileHandling.csproj",
         "packagesPath": "C:\\Users\\suraj.shinde\\.nuget\\packages\\",
-        "outputPath": "D:\\24167_Suraj_Shinde\\C#\\practise\\FileHandling\\educational-resource-repository\\FileHandling2\\FileHandling\\obj\\",
+        "outputPath": "D:\\24167_Suraj_Shinde\\C#\\practise\\FileHandling2\\FileHandling\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\suraj.shinde\\AppData\\Roaming\\NuGet\\NuGet.Config",

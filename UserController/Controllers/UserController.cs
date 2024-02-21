@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using UserController.data;
 using UserController.Models.EntityModel;
 using UserController.Models.RequestModel;
 using UserController.Models.ResponseModel;
@@ -19,11 +20,13 @@ namespace UserController.Controllers
 
         private readonly IUserServices _userServices;
         private IConfiguration _configuration;
+        private UserDbContext _db;
 
-        public UserController(IUserServices userServices, IConfiguration configuration)
+        public UserController(IUserServices userServices, IConfiguration configuration, UserDbContext db)
         {
             _userServices = userServices;
             _configuration = configuration;
+            _db = db;
         }
 
         [HttpGet("GetAll")]
@@ -85,6 +88,14 @@ namespace UserController.Controllers
             {
                 return BadRequest(ModelState);
             }
+            var list = _db.Users.ToList();
+            foreach(var user in list)
+            {
+                if(user.Email == model.Email)
+                {
+                    return BadRequest("Email already exists try giving another email.");
+                }
+            }
             var result = await _userServices.CreateUser(model);
 
             if (result == null)
@@ -144,39 +155,30 @@ namespace UserController.Controllers
             {
                 BadRequest(ModelState);
             }
+            
+            var user = _db.Users.FirstOrDefault(u => u.Email == model.Email && u.Password == model.Password);
 
             var result = await _userServices.LoginUser(model);
-            if (result == null)
+            if (result == 2)
             {
-                return Unauthorized("Invalid Username and Password");
+                return Unauthorized("Password doesnt match with the Email");
             }
-
-            if (model.Email == result.Email)
+            else if(result == 1)
             {
-                if (model.Password != result.Password)
+                string token = GenerateToken(user);
+
+                return Ok(new TokenResponseModel
                 {
-                    return Unauthorized("Wrong Password");
-                }
-
+                    Token = token,
+                    Username = user.Username,
+                    Standard = user.Standard,
+                    Id = user.Id,
+                    Email = user.Email
+                });
             }
-            else if (model.Password == result.Password)
-            {
-                if (model.Email != result.Email)
-                {
-                    return Unauthorized("Wrong Email");
-                }
-            }
-
-            string token = GenerateToken(result);
-
-            return Ok(new TokenResponseModel
-            {
-                Token = token,
-                Username = result.Username,
-                Standard = result.Standard,
-                Id = result.Id,
-                Email = result.Email
-            });
+            return BadRequest("Wrong Credentials");
+      
+                       
         }
 
         [NonAction]

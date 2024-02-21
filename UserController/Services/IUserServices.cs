@@ -17,7 +17,7 @@ namespace UserController.Services
 
         public Task<List<User>> GetActiveStdentsByStd(int std);
 
-        public Task<User> LoginUser(LoginModel model);
+        public Task<int> LoginUser(LoginModel model);
 
     }
 }

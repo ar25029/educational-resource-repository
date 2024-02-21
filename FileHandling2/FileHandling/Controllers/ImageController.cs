@@ -104,7 +104,7 @@ namespace FileHandling.Controllers
 
 
         [HttpGet("get/image/{fileName}")]
-        public IActionResult GetImage(string fileName)
+        public IActionResult GetFile(string fileName)
         {
             var status = new Status();
             string Name = _productRepo.GetImageName(fileName);
@@ -128,7 +128,82 @@ namespace FileHandling.Controllers
 
 
 
+        [HttpPost("file/standard/{std}")]
+        public async Task<IActionResult> GetAllFiles(int std)
+        {
+            var status = new Status();
+            var pdfs = _productRepo.GetFilesByStandard(std);
 
+            if (pdfs != null && pdfs.Any())
+            {
+                var pdfResults = new List<FileResponseModel>();
+
+                foreach (var pdf in pdfs)
+                {
+                    var result = _fileService.GetImage(pdf.ResourceImage);
+
+                    if (result.Item1 == 1)
+                    {
+                        var pdfResult = new FileResponseModel
+                        {
+                            StatusCode = 1,
+                            Message = "Pdf Retrieved Successfully",
+                            PdfName = pdf.ResourceName,
+                            Category = pdf.Category,
+                            PdfContent = result.Item2,
+                            Standard = pdf.Standard,
+                            ContentType = result.Item3
+                        };
+                        pdfResults.Add(pdfResult);
+                    }
+                }
+
+                return Ok(pdfResults);
+            }
+
+            status.StatusCode = 0;
+            status.Message = "No PDFs found";
+            return NotFound(status);
+        }
+
+
+        [HttpPost("file/standard/{std}/{Category}")]
+        public async Task<IActionResult> GetAllFiles(int std, string Category)
+        {
+            var status = new Status();
+            var pdfs = _productRepo.GetFilesByCategory(std, Category);
+
+            if (pdfs != null && pdfs.Any())
+            {
+                var pdfResults = new List<FileResponseModel>();
+
+                foreach (var pdf in pdfs)
+                {
+                    var result = _fileService.GetImage(pdf.ResourceImage);
+
+                    if (result.Item1 == 1)
+                    {
+                        var pdfResult = new FileResponseModel
+                        {
+                            StatusCode = 1,
+                            Message = "Pdf Retrieved Successfully",
+                            PdfName = pdf.ResourceName,
+                            Category = pdf.Category,
+                            PdfContent = result.Item2,
+                            Standard = pdf.Standard,
+                            ContentType = result.Item3
+                        };
+                        pdfResults.Add(pdfResult);
+                    }
+                }
+
+                return Ok(pdfResults);
+            }
+
+            status.StatusCode = 0;
+            status.Message = "No PDFs found";
+            return NotFound(status);
+        }
 
 
 

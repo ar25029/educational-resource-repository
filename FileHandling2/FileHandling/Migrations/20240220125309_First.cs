@@ -19,10 +19,12 @@ namespace FileHandling.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ResourceName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ResourceCategory = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Subject = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ResourceDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Standard = table.Column<int>(type: "int", nullable: false),
-                    ResourcePdf = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ResourcePdf = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Flag = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
