@@ -9,14 +9,16 @@ namespace FileHandling.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PdfController(IProductPdfRepository productPdfRepo, IPdfService pdfService) : ControllerBase
+    public class PdfController(IProductPdfRepository productPdfRepo, IPdfService pdfService, PdfContext db) : ControllerBase
     {
         private IPdfService _fileService = pdfService;
         private IProductPdfRepository _productRepo = productPdfRepo;
+        private PdfContext _db;
 
         [HttpPost]
         public IActionResult AddPdf([FromForm] Pdf model)
         {
+            
             var status = new Status();
             if (!ModelState.IsValid)
             {
@@ -54,7 +56,7 @@ namespace FileHandling.Controllers
 
 
         [HttpDelete("productPdf/delete/{pdfName}")]
-        public IActionResult DeletePdf(string pdfName)
+        public IActionResult DeletePdf(string pdfName, DateTime date)
         {
             var status = new Status();
             if (!ModelState.IsValid)
@@ -65,7 +67,7 @@ namespace FileHandling.Controllers
             }
 
 
-            string Name = _productRepo.GetPdfName(pdfName);
+            string Name = _productRepo.GetPdfName(pdfName,date);
 
 
             if (pdfName != null)
@@ -77,7 +79,7 @@ namespace FileHandling.Controllers
                 //    status.Message = "Enter valid name";// getting name of image
                 //}
 
-                var productResult = _productRepo.DeletePdf(pdfName);
+                var productResult = _productRepo.DeletePdf(pdfName, date);
                 if (productResult)
                 {
                     status.StatusCode = 1;

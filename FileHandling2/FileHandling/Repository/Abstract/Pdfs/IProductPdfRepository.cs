@@ -7,9 +7,9 @@ namespace FileHandling.Repository.Abstract.Pdfs
     {
         bool AddPdf(Pdf model);
 
-        bool DeletePdf(string name);
+        bool DeletePdf(string name, DateTime date);
 
-        public string GetPdfName(string name);
+        public string GetPdfName(string name, DateTime date);
 
         public Pdf GetPdf(string name);
 

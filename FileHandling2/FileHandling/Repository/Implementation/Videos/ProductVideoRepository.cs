@@ -14,6 +14,7 @@ namespace FileHandling.Repository.Implementation.Videos
         }
         public bool AddVideo(Video model)
         {
+
             try
             {
                 _context.Videos.Add(model);
@@ -27,7 +28,7 @@ namespace FileHandling.Repository.Implementation.Videos
         }
 
 
-        public bool DeleteVideo(string name)
+        public bool DeleteVideo(string name, DateTime date)
         {
 
             List<Video> list = _context.Videos.ToList();
@@ -36,7 +37,7 @@ namespace FileHandling.Repository.Implementation.Videos
             {
                 foreach (var product in list)
                 {
-                    if (product.ResourceName == name)
+                    if (product.ResourceName == name && product.DateCreated == date)
                     {
                         product.Flag = 0;
                         //_context.Pdfs.Remove(product);
@@ -53,7 +54,7 @@ namespace FileHandling.Repository.Implementation.Videos
         }
 
 
-        public string GetVideoName(string name)
+        public string GetVideoName(string name, DateTime date)
         {
             List<Video> list = _context.Videos.ToList();
 
@@ -61,7 +62,7 @@ namespace FileHandling.Repository.Implementation.Videos
             {
                 foreach (var product in list)
                 {
-                    if (product.ResourceName == name)
+                    if (product.ResourceName == name && product.DateCreated == date)
                     {
 
                         return product.ResourceVideo;

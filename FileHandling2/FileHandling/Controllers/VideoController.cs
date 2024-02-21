@@ -54,7 +54,7 @@ namespace FileHandling.Controllers
 
 
         [HttpDelete("delete")]
-        public IActionResult DeleteVideo(string videoName)
+        public IActionResult DeleteVideo(string videoName, DateTime date)
         {
             var status = new Status();
             if (!ModelState.IsValid)
@@ -65,7 +65,7 @@ namespace FileHandling.Controllers
             }
 
 
-            string Name = _productRepo.GetVideoName(videoName);
+            string Name = _productRepo.GetVideoName(videoName, date);
 
 
             if (videoName != null)
@@ -77,7 +77,7 @@ namespace FileHandling.Controllers
                 //    status.Message = "Enter valid name";// getting name of image
                 //}
 
-                var productResult = _productRepo.DeleteVideo(videoName);
+                var productResult = _productRepo.DeleteVideo(videoName, date);
                 if (productResult)
                 {
                     status.StatusCode = 1;

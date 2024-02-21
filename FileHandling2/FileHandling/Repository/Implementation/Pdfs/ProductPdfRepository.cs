@@ -28,7 +28,7 @@ namespace FileHandling.Repository.Implementation.Pdfs
         }
 
 
-        public bool DeletePdf(string name)
+        public bool DeletePdf(string name, DateTime date)
         {
 
             List<Pdf> list = _context.Pdfs.ToList();
@@ -37,7 +37,7 @@ namespace FileHandling.Repository.Implementation.Pdfs
             {
                 foreach (var product in list)
                 {
-                    if (product.ResourceName == name)
+                    if (product.ResourceName == name && product.DateCreated == date)
                     {
                         product.Flag = 0;
                         //_context.Pdfs.Remove(product);
@@ -54,7 +54,7 @@ namespace FileHandling.Repository.Implementation.Pdfs
         }
 
 
-        public string GetPdfName(string name)
+        public string GetPdfName(string name, DateTime date)
         {
             List<Pdf> list = _context.Pdfs.ToList();
 
@@ -62,7 +62,7 @@ namespace FileHandling.Repository.Implementation.Pdfs
             {
                 foreach (var product in list)
                 {
-                    if (product.ResourceName == name)
+                    if (product.ResourceName == name && product.DateCreated == date) 
                     {
 
                         return product.ResourcePdf;
