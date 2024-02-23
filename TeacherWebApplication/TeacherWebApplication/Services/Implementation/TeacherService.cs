@@ -82,6 +82,7 @@ namespace TeacherWebApplication.Services
                   
                     Email = teacher.Email,
                     Name = teacher.Name,
+                    Standard = teacher.Standard
 
                 });
             }
