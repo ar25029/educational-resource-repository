@@ -12,7 +12,7 @@ namespace FileHandling.Repository.Implementation.Pdfs
             _environment = environment;
 
         }
-        public Tuple<int, string> SavePdf(IFormFile imageFile)
+        public  Tuple<int, string> SavePdf(IFormFile imageFile)
         {
             try
             {

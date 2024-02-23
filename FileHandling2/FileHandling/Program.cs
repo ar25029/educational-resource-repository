@@ -1,3 +1,4 @@
+using FileHandling.data;
 using FileHandling.Models.Domain.Pdf;
 using FileHandling.Models.Domain.VideoModels;
 using FileHandling.Repository.Abstract;
@@ -28,33 +29,21 @@ namespace FileHandling
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddDbContext<ImageContext>(options =>
+            builder.Services.AddDbContext<FileContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("conn"));
-            });
+            });         
 
 
-            builder.Services.AddDbContext<VideoContext>(options =>
-            {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("conn"));
-            });
+            //builder.Services.AddTransient<IImageService, ImageService>();
+            //builder.Services.AddTransient<IProductImageRepository, ProductImageRepository>();
 
 
-            builder.Services.AddDbContext<PdfContext>(options =>
-            {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("conn"));
-            });
+            //builder.Services.AddTransient<IPdfService, PdfService>();
+            //builder.Services.AddTransient<IProductPdfRepository, ProductPdfRepository>();
 
-
-            builder.Services.AddTransient<IImageService, ImageService>();
-            builder.Services.AddTransient<IProductImageRepository, ProductImageRepository>();
-
-
-            builder.Services.AddTransient<IPdfService, PdfService>();
-            builder.Services.AddTransient<IProductPdfRepository, ProductPdfRepository>();
-
-            builder.Services.AddTransient<IVideoService, VideoService>();
-            builder.Services.AddTransient<IProductVideoRepository, ProductVideoRepository>();
+            //builder.Services.AddTransient<IVideoService, VideoService>();
+            //builder.Services.AddTransient<IProductVideoRepository, ProductVideoRepository>();
 
             builder.Services.AddCors(
               pol =>

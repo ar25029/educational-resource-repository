@@ -5,19 +5,20 @@ namespace FileHandling.Repository.Abstract.Videos
 {
     public interface IProductVideoRepository
     {
-        bool AddVideo(Video model);
+        Task<bool> AddVideo(Video model);
 
-        bool DeleteVideo(string name, DateTime date);
+        Task<bool> DeleteVideo(string name, DateTime date);
 
-        public string GetVideoName(string name, DateTime date);
+        Task<string> GetVideoName(string name, DateTime date);
 
-        public Video GetVideo(string name);
+        Task<Video> GetVideo(string name);
 
-        public List<Video> GetAllVideos();
+        Task<List<Video>> GetAllVideos();
 
-        public List<Video> GetAllPublishableVideos(int std);
-        public List<Video> GetVideoByStandard(int standard);
+        Task<List<Video>> GetAllPublishableVideos(int std);
+        Task<List<Video>> GetAllDeletedVideos(int std);
+        Task<List<Video>> GetVideoByStandard(int standard);
 
-        public int PublishVideo(string name, int std);
+        Task<int> PublishVideo(string name, int std);
     }
 }

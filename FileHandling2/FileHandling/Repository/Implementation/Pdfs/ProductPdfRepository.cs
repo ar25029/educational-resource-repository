@@ -1,155 +1,172 @@
-﻿using FileHandling.Models.Domain.Pdf;
-using FileHandling.Repository.Abstract.Pdfs;
-using Microsoft.EntityFrameworkCore;
+﻿//using FileHandling.Models.Domain.Pdf;
+//using FileHandling.Repository.Abstract.Pdfs;
+//using Microsoft.EntityFrameworkCore;
 
-namespace FileHandling.Repository.Implementation.Pdfs
-{
-    public class ProductPdfRepository : IProductPdfRepository
-    {
-        private readonly PdfContext _context;
+//namespace FileHandling.Repository.Implementation.Pdfs
+//{
+//    public class ProductPdfRepository : IProductPdfRepository
+//    {
+//        private readonly PdfContext _context;
 
-        public ProductPdfRepository(PdfContext context)
-        {
-            _context = context;
-        }
+//        public ProductPdfRepository(PdfContext context)
+//        {
+//            _context = context;
+//        }
 
-        public bool AddPdf(Pdf model)
-        {
-            try
-            {
-                _context.Pdfs.Add(model);
-                _context.SaveChanges();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
-
-
-        public bool DeletePdf(string name, DateTime date)
-        {
-
-            List<Pdf> list = _context.Pdfs.ToList();
-
-            if (list != null)
-            {
-                foreach (var product in list)
-                {
-                    if (product.ResourceName == name && product.DateCreated == date)
-                    {
-                        product.Flag = 0;
-                        //_context.Pdfs.Remove(product);
-                        _context.SaveChanges();
-                        return true;
-
-                    }
+//        public async Task<bool> AddPdf(Pdf model)
+//        {
+//            try
+//            {
+//                _context.Pdfs.Add(model);
+//                await _context.SaveChangesAsync();
+//                return true;
+//            }
+//            catch (Exception ex)
+//            {
+//                return false;
+//            }
+//        }
 
 
-                }
+//        public async Task<bool> DeletePdf(string name, DateTime date)
+//        {
 
-            }
-            return false;
-        }
+//            List<Pdf> list = await _context.Pdfs.ToListAsync();
 
+//            if (list != null)
+//            {
+//                foreach (var product in list)
+//                {
+//                    if (product.ResourceName == name && product.DateCreated == date)
+//                    {
+//                        product.Flag = 0;
+//                        //_context.Pdfs.Remove(product);
+//                        await _context.SaveChangesAsync();
+//                        return true;
 
-        public string GetPdfName(string name, DateTime date)
-        {
-            List<Pdf> list = _context.Pdfs.ToList();
-
-            if (list != null)
-            {
-                foreach (var product in list)
-                {
-                    if (product.ResourceName == name && product.DateCreated == date) 
-                    {
-
-                        return product.ResourcePdf;
-
-                    }
+//                    }
 
 
-                }
+//                }
 
-            }
-            return "Check the Pdf name";
-
-        }
-
-
-        public Pdf GetPdf(string name)
-        {
-            List<Pdf> list = _context.Pdfs.ToList();
-
-            if (list != null)
-            {
-                foreach (var product in list)
-                {
-                    if (product.ResourceName == name )
-                    {
-
-                        return product;
-
-                    }
+//            }
+//            return false;
+//        }
 
 
-                }
+//        public async Task<string> GetPdfName(string name, DateTime date)
+//        {
+//            List<Pdf> list = await _context.Pdfs.ToListAsync();
 
-            }
-            return null;
-        }
+//            if (list != null)
+//            {
+//                foreach (var product in list)
+//                {
+//                    if (product.ResourceName == name && product.DateCreated == date) 
+//                    {
+
+//                        return  product.ResourcePdf;
+
+//                    }
 
 
-        public List<Pdf> GetAllPdfs()
-        {
-            return _context.Pdfs.ToList();
-        }
+//                }
 
-        public List<Pdf> GetAllPublishablePdfs(int std)
-        {
-            List<Pdf> list = _context.Pdfs.ToList();
-            List<Pdf> all = new List<Pdf>();
-            foreach (var product in list)
-            {
-                if(product.Standard == std && product.Flag == 2)
-                {
-                    all.Add(product);
-                }
-            }
-            return all;
-        }
+//            }
+//            return "Check the Pdf name";
 
-        public List<Pdf> GetPdfByStandard(int std)
-        {
-            List<Pdf> list = _context.Pdfs.ToList();
-            List<Pdf> temp = new List<Pdf>();
+//        }
 
-            foreach (var product in list)
-            {
-                if (product.Standard == std && product.Flag == 1)
-                {
-                    temp.Add(product);
-                }
-            }
-            return temp;
-        }
 
-        public int PublishPdf(string name, int std)
-        {
-            List<Pdf> list = _context.Pdfs.ToList();
-            DateTime date = DateTime.Now;
-            foreach (var item in list)
-            {
-                if(item.ResourceName == name && item.Standard == std)
-                {
-                    item.Flag = 1;
-                    item.DateCreated = date;
-                    _context.SaveChanges();
-                    return 1;
-                }
-            }
-            return 0;
-        }
-    }
-}
+//        public async Task<Pdf> GetPdf(string name)
+//        {
+//            List<Pdf> list = await _context.Pdfs.ToListAsync();
+
+//            if (list != null)
+//            {
+//                foreach (var product in list)
+//                {
+//                    if (product.ResourceName == name )
+//                    {
+
+//                        return product;
+
+//                    }
+
+
+//                }
+
+//            }
+//            return null;
+//        }
+
+
+//        public async Task<List<Pdf>> GetAllPdfs()
+//        {
+//            return await _context.Pdfs.ToListAsync();
+//        }
+
+//        public async Task<List<Pdf>> GetAllPublishablePdfs(int std)
+//        {
+//            List<Pdf> list = await _context.Pdfs.ToListAsync();
+//            List<Pdf> all = new List<Pdf>();
+//            foreach (var product in list)
+//            {
+//                if(product.Standard == std && product.Flag == 2)
+//                {
+//                    all.Add(product);
+//                }
+//            }
+//            return all;
+//        }
+
+//        public async Task<List<Pdf>> GetPdfByStandard(int std)
+//        {
+//            List<Pdf> list = await _context.Pdfs.ToListAsync();
+//            List<Pdf> temp = new List<Pdf>();
+
+//            foreach (var product in list)
+//            {
+//                if (product.Standard == std && product.Flag == 1)
+//                {
+//                    temp.Add(product);
+//                }
+//            }
+//            return temp;
+//        }
+
+
+
+//        public async Task<List<Pdf>> GetAllDeletedPdfs(int std)
+//        {
+//            List<Pdf> list = await _context.Pdfs.ToListAsync();
+//            List<Pdf> all = new List<Pdf>();
+//            foreach (var product in list)
+//            {
+//                if (product.Standard == std && product.Flag == 0)
+//                {
+//                    all.Add(product);
+//                }
+//            }
+//            return all;
+//        }
+
+
+//        public async Task<int> PublishPdf(string name, int std)
+//        {
+//            List<Pdf> list = await _context.Pdfs.ToListAsync();
+//            DateTime date = DateTime.Now;
+//            foreach (var item in list)
+//            {
+//                if(item.ResourceName == name && item.Standard == std)
+//                {
+//                    item.Flag = 1;
+//                    item.DateCreated = date;
+//                    await _context.SaveChangesAsync();
+//                    return 1;
+//                }
+//            }
+//            return 0;
+//        }
+//    }
+//}
