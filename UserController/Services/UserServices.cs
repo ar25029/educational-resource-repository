@@ -17,17 +17,6 @@ namespace UserController.Services
         public async Task<RegisterResponseModel> CreateUser(RegisterModel model)
         {
 
-            List<User> list = await _db.Users.ToListAsync();
-
-            foreach (var item in list)
-            {
-                if(item.Username == model.Username)
-                {
-                    return null;
-                }
-            }
-
-
             User user = new User
             {
                 Username = model.Username,

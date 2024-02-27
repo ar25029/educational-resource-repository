@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -38,21 +39,28 @@ namespace UserController.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var list = _db.Users.ToList();
-            foreach (var user in list)
+
+            var existingUser = await _db.Users.FirstOrDefaultAsync(u => u.Email == model.Email || u.Username == model.Username);
+            if (existingUser != null)
             {
-                if (user.Email == model.Email)
+                if (existingUser.Email == model.Email)
                 {
-                    return BadRequest("Email already exists try giving another email.");
+                    return BadRequest("Email already exists, try giving another email.");
+                }
+                else // Username already exists
+                {
+                    return BadRequest("Username already exists, try giving a different username.");
                 }
             }
-            var result = await _userServices.CreateUser(model);
 
-            if (result == null)
+
+            var result = await _userServices.CreateUser(model);
+            if(result == null)
             {
-                return BadRequest("Username already exists try giving different username");
+                return BadRequest("Unable to register .");
             }
             return Ok(result);
+            
         }
 
 

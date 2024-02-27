@@ -6,7 +6,7 @@ namespace FileHandling.Repository.Abstract.Pdfs
     {
         Task<bool> AddPdf(Pdf model);
 
-        Task<bool> DeletePdf(string name, DateTime date);
+        Task<bool> DeletePdf(string name, int id);
 
         Task<string> GetPdfName(string name, DateTime date);
 

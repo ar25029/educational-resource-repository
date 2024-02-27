@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -9,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UserController.Controllers;
 using UserController.data;
+using UserController.Models.EntityModel;
 using UserController.Models.RequestModel;
 using UserController.Models.ResponseModel;
 using UserController.Services;
@@ -18,128 +22,200 @@ namespace UserControllerTest.Controllers
  
     public class UserControllerTests
     {
+
+        private DbContextOptions<UserDbContext> _options;
+
+        public UserControllerTests()
+        {
+            _options = new DbContextOptionsBuilder<UserDbContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+        }
+
         [Fact]
         public async Task Register_ValidModel_ReturnsOkResult()
         {
-           
             // Arrange
-            var model = new RegisterModel
+            using (var context = new UserDbContext(_options))
             {
-                Username = "test",
-                Role = "User",
-                Email = "test12@example.com",
-                Password = "password",
-                Standard = 7,
-                Roll = 32,
-               
-            };
+                var mockUserServices = new Mock<IUserServices>();
+                mockUserServices.Setup(s => s.CreateUser(It.IsAny<RegisterModel>())).ReturnsAsync(new RegisterResponseModel());
 
-            var mockUserServices = new Mock<IUserServices>();
-            mockUserServices.Setup(s => s.CreateUser(It.IsAny<RegisterModel>())).ReturnsAsync(new RegisterResponseModel());
+                var mockConfiguration = new Mock<IConfiguration>();
 
-            var mockConfiguration = new Mock<IConfiguration>();
 
-            //Inmemory database for testing
-            var options = new DbContextOptionsBuilder<UserDbContext>()
-            .UseInMemoryDatabase(databaseName: "TestDatabase")
-            .Options;
 
-            using (var context = new UserDbContext(options))
-            {
                 var controller = new UserControllers(mockUserServices.Object, mockConfiguration.Object, context);
+
+                var objectValidator = new Mock<IObjectModelValidator>();
+                objectValidator.Setup(o => o.Validate(
+                    It.IsAny<ActionContext>(),
+                    It.IsAny<ValidationStateDictionary>(),
+                    It.IsAny<string>(),
+                    It.IsAny<object>()));
+
+                controller.ObjectValidator = objectValidator.Object;
+
+                var model = new RegisterModel
+                {
+                    Username = "test",
+                    Role = "User",
+                    Email = "test12example.com",
+                    Password = "password",
+                    Standard = 7,
+                    Roll = 32,
+                    DOB = DateTime.Now
+                };
 
                 // Act
                 var result = await controller.Register(model);
 
                 // Assert
-                Assert.IsType<OkObjectResult>(result);
+                var okResult = Assert.IsType<OkObjectResult>(result);
+                Assert.NotNull(okResult.Value);
             }
-
-           
         }
 
-        //[Fact]
-        //public async Task Register_InvalidModelState_ReturnsBadRequest()
-        //{
-        //    // Arrange
-        //    var model = new RegisterModel
-        //    {
-        //        // Provide invalid model data here
-        //    };
 
-        //    var controller = new UserController();
+        [Fact]
+        public async Task Register_InvalidModelState_ReturnsBadRequest()
+        {
+            // Arrange
+            using (var context = new UserDbContext(_options))
+            {
+                var mockUserServices = new Mock<IUserServices>();
+                var mockConfiguration = new Mock<IConfiguration>();
 
-        //    controller.ModelState.AddModelError("key", "error message");
+                var controller = new UserControllers(mockUserServices.Object, mockConfiguration.Object, context);
 
-        //    // Act
-        //    var result = await controller.Register(model);
+                var objectValidator = new Mock<IObjectModelValidator>();
+                objectValidator.Setup(o => o.Validate(
+                    It.IsAny<ActionContext>(),
+                    It.IsAny<ValidationStateDictionary>(),
+                    It.IsAny<string>(),
+                    It.IsAny<object>()));
 
-        //    // Assert
-        //    Assert.IsType<BadRequestObjectResult>(result);
-        //}
+                controller.ObjectValidator = objectValidator.Object;
 
-        //[Fact]
-        //public async Task Register_ExistingEmail_ReturnsBadRequest()
-        //{
-        //    // Arrange
-        //    var model = new RegisterModel
-        //    {
-        //        // Provide model data with existing email
-        //    };
+                controller.ModelState.AddModelError("key", "error message");
+                var model = new RegisterModel();
 
-        //    var mockUserServices = new Mock<IUserServices>();
-        //    mockUserServices.Setup(s => s.CreateUser(It.IsAny<RegisterModel>())).ReturnsAsync((RegisterResponseModel)null); // Simulate existing email
+                // Act
+                var result = await controller.Register(model);
 
-        //    var controller = new UserController(mockUserServices.Object);
+                // Assert
+                var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+                Assert.IsAssignableFrom<SerializableError>(badRequestResult.Value);
+            }
+        }
 
-        //    // Act
-        //    var result = await controller.Register(model);
+        [Fact]
+        public async Task Register_ExistingUsername_ReturnsBadRequest()
+        {
+            // Arrange
+            using (var context = new UserDbContext(_options))
+            {
+                var existingUser = new User
+                {
+                    Username = "existingUser",
+                    Email = "existing@example.com",
+                    Password = "password",
+                    Role = "User",
+                    Standard = 7,
+                    Roll = 32,
+                    DOB = DateTime.Now,
+                    Flag = true
+                };
+                context.Users.Add(existingUser);
+                context.SaveChanges();
 
-        //    // Assert
-        //    Assert.IsType<BadRequestObjectResult>(result);
-        //}
+                var mockUserServices = new Mock<IUserServices>();
+                var mockConfiguration = new Mock<IConfiguration>();
 
-        //[Fact]
-        //public async Task Register_ExistingUsername_ReturnsBadRequest()
-        //{
-        //    // Arrange
-        //    var model = new RegisterModel
-        //    {
-        //        // Provide model data with existing username
-        //    };
+                var controller = new UserControllers(mockUserServices.Object, mockConfiguration.Object, context);
 
-        //    var mockUserServices = new Mock<IUserServices>();
-        //    mockUserServices.Setup(s => s.CreateUser(It.IsAny<RegisterModel>())).ReturnsAsync((RegisterResponseModel)null); // Simulate existing username
+                var objectValidator = new Mock<IObjectModelValidator>();
+                objectValidator.Setup(o => o.Validate(
+                    It.IsAny<ActionContext>(),
+                    It.IsAny<ValidationStateDictionary>(),
+                    It.IsAny<string>(),
+                    It.IsAny<object>()));
 
-        //    var controller = new UserController(mockUserServices.Object);
+                controller.ObjectValidator = objectValidator.Object;
 
-        //    // Act
-        //    var result = await controller.Register(model);
+                var model = new RegisterModel
+                {
+                    Username = "existingUser", // Existing username
+                    Role = "User",
+                    Email = "new@example.com",
+                    Password = "password",
+                    Standard = 7,
+                    Roll = 32,
+                };
 
-        //    // Assert
-        //    Assert.IsType<BadRequestObjectResult>(result);
-        //}
+                // Act
+                var result = await controller.Register(model);
 
-        //[Fact]
-        //public async Task Register_UserCreationSuccess_ReturnsOkResult()
-        //{
-        //    // Arrange
-        //    var model = new RegisterModel
-        //    {
-        //        // Provide valid model data here
-        //    };
+                // Assert
+                var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+                Assert.Equal("Username already exists, try giving a different username.", badRequestResult.Value);
+            }
+        }
 
-        //    var mockUserServices = new Mock<IUserServices>();
-        //    mockUserServices.Setup(s => s.CreateUser(It.IsAny<RegisterModel>())).ReturnsAsync(new RegisterResponseModel());
+        [Fact]
+        public async Task Register_ExistingEmail_ReturnsBadRequest()
+        {
+            // Arrange
+            using (var context = new UserDbContext(_options))
+            {
+                var existingUser = new User
+                {
+                    Username = "existingUser",
+                    Email = "existing@example.com",
+                    Password = "password",
+                    Role = "User",
+                    Standard = 7,
+                    Roll = 32,
+                    DOB = DateTime.Now,
+                    Flag = true
+                };
+                context.Users.Add(existingUser);
+                context.SaveChanges();
 
-        //    var controller = new UserController(mockUserServices.Object);
+                var mockUserServices = new Mock<IUserServices>();
+                var mockConfiguration = new Mock<IConfiguration>();
 
-        //    // Act
-        //    var result = await controller.Register(model);
+                var controller = new UserControllers(mockUserServices.Object, mockConfiguration.Object, context);
 
-        //    // Assert
-        //    Assert.IsType<OkObjectResult>(result);
-        //}
+                var objectValidator = new Mock<IObjectModelValidator>();
+                objectValidator.Setup(o => o.Validate(
+                    It.IsAny<ActionContext>(),
+                    It.IsAny<ValidationStateDictionary>(),
+                    It.IsAny<string>(),
+                    It.IsAny<object>()));
+
+                controller.ObjectValidator = objectValidator.Object;
+
+                var model = new RegisterModel
+                {
+                    Username = "newUser",
+                    Role = "User",
+                    Email = "existing@example.com", // Existing email
+                    Password = "password",
+                    Standard = 7,
+                    Roll = 32,
+                };
+
+                // Act
+                var result = await controller.Register(model);
+
+                // Assert
+                var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+                Assert.Equal("Email already exists, try giving another email.", badRequestResult.Value);
+            }
+        }
+
+
 
     }
 }

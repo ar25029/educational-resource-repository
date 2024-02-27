@@ -39,7 +39,7 @@ namespace TeacherWebApplication.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(TeacherRegisterModel model)
+        public async Task<IActionResult> Register([FromForm]TeacherRegisterModel model)
         {
             TryValidateModel(model);
             if(!ModelState.IsValid)

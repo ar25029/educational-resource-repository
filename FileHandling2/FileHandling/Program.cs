@@ -32,18 +32,18 @@ namespace FileHandling
             builder.Services.AddDbContext<FileContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("conn"));
-            });         
+            });
 
 
-            //builder.Services.AddTransient<IImageService, ImageService>();
-            //builder.Services.AddTransient<IProductImageRepository, ProductImageRepository>();
+            builder.Services.AddTransient<IImageService, ImageService>();
+            builder.Services.AddTransient<IProductImageRepository, ProductImageRepository>();
 
 
-            //builder.Services.AddTransient<IPdfService, PdfService>();
-            //builder.Services.AddTransient<IProductPdfRepository, ProductPdfRepository>();
+            builder.Services.AddTransient<IPdfService, PdfService>();
+            builder.Services.AddTransient<IProductPdfRepository, ProductPdfRepository>();
 
-            //builder.Services.AddTransient<IVideoService, VideoService>();
-            //builder.Services.AddTransient<IProductVideoRepository, ProductVideoRepository>();
+            builder.Services.AddTransient<IVideoService, VideoService>();
+            builder.Services.AddTransient<IProductVideoRepository, ProductVideoRepository>();
 
             builder.Services.AddCors(
               pol =>
@@ -52,8 +52,8 @@ namespace FileHandling
                   {
                       pol.AllowAnyHeader();
                       pol.AllowAnyMethod();
-                      //pol.AllowAnyOrigin();
-                      pol.WithOrigins("http://localhost:3000");
+                      pol.AllowAnyOrigin();
+                      //pol.WithOrigins("http://localhost:3000");
                       
                   });
               });
