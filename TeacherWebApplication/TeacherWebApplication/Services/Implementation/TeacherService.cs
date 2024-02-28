@@ -15,16 +15,16 @@ namespace TeacherWebApplication.Services
         }
         public async Task<TeacherResponseModel> CreateTeacher(TeacherRegisterModel trqm)
         {
-            List<Teacher> list = _db.TeacherTable.ToList();
+            //List<Teacher> list = _db.TeacherTable.ToList();
             
 
-            foreach (Teacher t in list)
-            {
-                if(t.Name == trqm.Name)
-                {
-                    return null;
-                }
-            }
+            //foreach (Teacher t in list)
+            //{
+            //    if(t.Name == trqm.Name)
+            //    {
+            //        return null;
+            //    }
+            //}
 
 
             Teacher teacher = new Teacher()

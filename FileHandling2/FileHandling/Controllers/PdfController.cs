@@ -273,7 +273,7 @@ namespace FileHandling.Controllers
                             Category = pdf.ResourceCategory,
                             Description = pdf.ResourceDescription,
                             Subject = pdf.Subject,
-                            Created = pdf.DateCreated,
+                            Created = pdf.DateCreated, // Corrected line
                             Standard = pdf.Standard,
                             PdfContent = result.Item2,
                             ContentType = result.Item3

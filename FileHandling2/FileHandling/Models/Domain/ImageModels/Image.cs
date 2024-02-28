@@ -20,7 +20,7 @@ namespace FileHandling.Models.Domain.ImageModels
 
 
         [Required]
-        public DateTime? DateCreated { get; set; }
+        public DateTime DateCreated { get; set; }
 
         public string? ResourceImage { get; set; }
 

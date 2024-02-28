@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -48,15 +49,18 @@ namespace TeacherWebApplication.Controllers
             }
 
 
-            var list = _db.TeacherTable.ToList();
-            foreach (var teacher in list)
+            var existingUser = await _db.TeacherTable.FirstOrDefaultAsync(u => u.Email == model.Email || u.Name == model.Name);
+            if (existingUser != null)
             {
-                if (teacher.Email == model.Email)
+                if (existingUser.Email == model.Email)
                 {
-                    return BadRequest("Email already exists try giving another email.");
+                    return BadRequest("Email already exists, try giving another email.");
+                }
+                else // Username already exists
+                {
+                    return BadRequest("Username already exists, try giving a different username.");
                 }
             }
-
 
             var result = await _ts.CreateTeacher(model);
             if (result == null)

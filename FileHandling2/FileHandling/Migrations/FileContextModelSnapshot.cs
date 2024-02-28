@@ -33,8 +33,7 @@ namespace FileHandling.Migrations
                     b.Property<string>("Category")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("DateCreated")
-                        .IsRequired()
+                    b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ResourceDescription")
@@ -64,8 +63,7 @@ namespace FileHandling.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
 
-                    b.Property<DateTime?>("DateCreated")
-                        .IsRequired()
+                    b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Flag")
@@ -106,8 +104,7 @@ namespace FileHandling.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
 
-                    b.Property<DateTime?>("DateCreated")
-                        .IsRequired()
+                    b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Flag")
