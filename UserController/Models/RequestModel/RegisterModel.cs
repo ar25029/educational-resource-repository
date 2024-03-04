@@ -10,10 +10,6 @@ namespace UserController.Models.RequestModel
         [StringLength(50, ErrorMessage = "Username cannot be more than 50 characters.")]
         public string Username { get; set; } 
 
-        [Required(ErrorMessage = "Role is Required")]
-        [StringLength(20, ErrorMessage = "Role cannot be more than 20 characters")]
-        public string Role { get; set; }
-
 
         [Required(ErrorMessage = "Email is Required")]
         [StringLength(200, ErrorMessage = "Email cannot be more than 100 characters")]

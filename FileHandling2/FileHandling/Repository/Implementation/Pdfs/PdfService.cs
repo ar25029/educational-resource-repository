@@ -17,11 +17,11 @@ namespace FileHandling.Repository.Implementation.Pdfs
             try
             {
                 var contentPath = _environment.ContentRootPath;
-                //path = "c://Projects/Productminiapi/uploads , Something like that
-
                 var path = Path.Combine(contentPath, "uploads");
                 var ext = Path.GetExtension(imageFile.FileName);
-                
+
+
+                // Create a subfolder for PDFs if the file is a PDF or DOC
                 if (ext == ".pdf" || ext == ".doc")
                 {
                     path = Path.Combine(contentPath, "uploads\\Pdf's");
@@ -33,7 +33,6 @@ namespace FileHandling.Repository.Implementation.Pdfs
 
 
                 //Check the allowed extensions
-
                 var allowedExtensions = new string[] {".pdf", ".doc"};
                 if (!allowedExtensions.Contains(ext))
                 {
@@ -41,11 +40,13 @@ namespace FileHandling.Repository.Implementation.Pdfs
                     return new Tuple<int, string>(0, msg);
                 }
 
+                // Generate a unique filename
                 string uniqueString = Guid.NewGuid().ToString();
-
                 var newFileName = uniqueString + ext;
                 var fileWithPath = Path.Combine(path, newFileName);
-                //var fileWithPath = Path.Combine(path, imageFile.FileName);
+
+                // Save the file
+                
                 var stream = new FileStream(fileWithPath, FileMode.Create);
                 imageFile.CopyTo(stream);
                 stream.Close();
@@ -88,9 +89,6 @@ namespace FileHandling.Repository.Implementation.Pdfs
             try
             {
                 var wwwPath = this._environment.ContentRootPath;
-
-
-
                 var path = Path.Combine(wwwPath, "uploads\\Pdf's", fileName);
 
                 if (File.Exists(path))
@@ -126,6 +124,5 @@ namespace FileHandling.Repository.Implementation.Pdfs
             }
         }
 
-        
     }
 }

@@ -16,6 +16,8 @@ namespace FileHandling.Controllers
         private IProductPdfRepository _productRepo = productPdfRepo;
         private FileContext _db;
 
+
+        //1
         [HttpPost]
         public async Task<IActionResult> AddPdf([FromForm] Pdf model)
         {
@@ -55,7 +57,7 @@ namespace FileHandling.Controllers
 
         }
 
-
+        //2
         [HttpDelete("productPdf/delete/{pdfName}/{id}")]
         public async Task<IActionResult> DeletePdf(string pdfName, int id)
         {
@@ -92,7 +94,7 @@ namespace FileHandling.Controllers
             return Ok(status);
         }
 
-
+        //3
         [HttpGet("get/pdf/{fileName}")]
         public async Task<IActionResult> GetPdf(string fileName)
         {
@@ -115,7 +117,7 @@ namespace FileHandling.Controllers
 
         }
 
-
+        //4
         [HttpGet("get/all/pdfs")]
         public async Task<IActionResult> GetAllPdfs()
         {
@@ -134,6 +136,7 @@ namespace FileHandling.Controllers
                     {
                         var pdfResult = new FileResponseModel
                         {
+                            id = pdf.Id,
                             StatusCode = 1,
                             Message = "Pdf Retrieved Successfully",
                             PdfName = pdf.ResourceName,
@@ -143,7 +146,9 @@ namespace FileHandling.Controllers
                             Created = pdf.DateCreated,
                             Standard = pdf.Standard,
                             PdfContent = result.Item2,
-                            ContentType = result.Item3
+                            //ContentType = result.Item3
+                            ContentType = result.Item3[..1]
+
                         };
                         pdfResults.Add(pdfResult);
                     }
@@ -157,16 +162,57 @@ namespace FileHandling.Controllers
             return NotFound(status);
         }
 
-
-
-
-
-
+        //5
         [HttpPost("Pdf/Standard/{std}")]
         public async Task<IActionResult> GetAllPdfs(int std)
         {
             var status = new Status();
             var pdfs = await _productRepo.GetPdfByStandard(std);
+
+            if (pdfs != null && pdfs.Any())
+            {
+                var pdfResults = new List<FileResponseModel>();
+
+                foreach (var pdf in pdfs)
+                {
+                    var result = _fileService.GetPdf(pdf.ResourcePdf);
+
+                    if (result.Item1 == 1)
+                    {
+                        var pdfResult = new FileResponseModel
+                        {
+                            id = pdf.Id,
+                            StatusCode = 1,
+                            Message = "Pdf Retrieved Successfully",
+                            PdfName = pdf.ResourceName,
+                            Category = pdf.ResourceCategory,
+                            Description = pdf.ResourceDescription,
+                            Subject = pdf.Subject,
+                            Created = pdf.DateCreated,
+                            Standard = pdf.Standard,
+                            PdfContent = result.Item2,
+                            ContentType = result.Item3
+                           
+
+                        };
+                        pdfResults.Add(pdfResult);
+                    }
+                }
+
+                return Ok(pdfResults);
+            }
+
+            status.StatusCode = 0;
+            status.Message = "No PDFs found";
+            return NotFound(status);
+        }
+
+        //6
+        [HttpPost("Pdf/Standard/Publishable/{std}")]
+        public async Task<IActionResult> GetAllPublishablePdfs(int std)
+        {
+            var status = new Status();
+            var pdfs = await _productRepo.GetAllPublishablePdfs(std);
 
             if (pdfs != null && pdfs.Any())
             {
@@ -204,51 +250,7 @@ namespace FileHandling.Controllers
             return NotFound(status);
         }
 
-
-
-
-        [HttpPost("Pdf/Standard/Publishable/{std}")]
-        public async Task<IActionResult> GetAllPublishablePdfs(int std)
-        {
-            var status = new Status();
-            var pdfs = await _productRepo.GetAllPublishablePdfs(std);
-
-            if (pdfs != null && pdfs.Any())
-            {
-                var pdfResults = new List<FileResponseModel>();
-
-                foreach (var pdf in pdfs)
-                {
-                    var result = _fileService.GetPdf(pdf.ResourcePdf);
-
-                    if (result.Item1 == 1)
-                    {
-                        var pdfResult = new FileResponseModel
-                        {
-                            StatusCode = 1,
-                            Message = "Pdf Retrieved Successfully",
-                            PdfName = pdf.ResourceName,
-                            Category = pdf.ResourceCategory,
-                            Description = pdf.ResourceDescription,
-                            Subject = pdf.Subject,
-                            Created = pdf.DateCreated,
-                            Standard = pdf.Standard,
-                            PdfContent = result.Item2,
-                            ContentType = result.Item3
-                        };
-                        pdfResults.Add(pdfResult);
-                    }
-                }
-
-                return Ok(pdfResults);
-            }
-
-            status.StatusCode = 0;
-            status.Message = "No PDFs found";
-            return NotFound(status);
-        }
-
-
+        //7
         [HttpPost("Pdf/Standard/Deleted/{std}")]
         public async Task<IActionResult> ShowAllDeletedPdfs(int std)
         {
@@ -267,6 +269,7 @@ namespace FileHandling.Controllers
                     {
                         var pdfResult = new FileResponseModel
                         {
+                            id = pdf.Id,
                             StatusCode = 1,
                             Message = "Pdf Retrieved Successfully",
                             PdfName = pdf.ResourceName,
@@ -277,6 +280,8 @@ namespace FileHandling.Controllers
                             Standard = pdf.Standard,
                             PdfContent = result.Item2,
                             ContentType = result.Item3
+                           
+
                         };
                         pdfResults.Add(pdfResult);
                     }
@@ -290,7 +295,7 @@ namespace FileHandling.Controllers
             return NotFound(status);
         }
 
-
+        //8
         [HttpPost("Publish/{name}/{std}")]
         public async Task<IActionResult> PublishPdf(string name, int std)
         {

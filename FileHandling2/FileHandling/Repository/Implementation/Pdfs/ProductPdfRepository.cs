@@ -109,16 +109,9 @@ namespace FileHandling.Repository.Implementation.Pdfs
 
         public async Task<List<Pdf>> GetAllPublishablePdfs(int std)
         {
-            List<Pdf> list = await _context.Pdfs.ToListAsync();
-            List<Pdf> all = new List<Pdf>();
-            foreach (var product in list)
-            {
-                if (product.Standard == std && product.Flag == 2)
-                {
-                    all.Add(product);
-                }
-            }
-            return all;
+            return await _context.Pdfs
+                       .Where(pdf => pdf.Standard == std && pdf.Flag == 2)
+                       .ToListAsync();
         }
 
         public async Task<List<Pdf>> GetPdfByStandard(int std)

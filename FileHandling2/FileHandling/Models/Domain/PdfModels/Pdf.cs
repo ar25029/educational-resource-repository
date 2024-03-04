@@ -21,7 +21,7 @@ namespace FileHandling.Models.Domain.Pdf
         public string ? ResourceDescription { get; set; }
 
         [Required]
-        public DateTime DateCreated { get; set; }
+        public DateTime? DateCreated { get; set; }
 
         [Required]
         public int? Standard {  get; set; }

@@ -8,15 +8,19 @@ namespace UserController.Services
 {
     public class UserServices : IUserServices
     {
+        //Dependency injection
         UserDbContext _db;
 
+        //Injecting DBContext Class
         public UserServices(UserDbContext db)
         {
             _db = db;
         }
+
+        //Servise for creating/registering user .
         public async Task<RegisterResponseModel> CreateUser(RegisterModel model)
         {
-
+            //Copying register model data in original user model add in database
             User user = new User
             {
                 Username = model.Username,
@@ -29,12 +33,15 @@ namespace UserController.Services
                 Flag = true,
             };
 
-            if (user != null)
+
+            if (user != null)//No issue 
             {
-                _db.Users.Add(user);
-                await _db.SaveChangesAsync();
+
+                _db.Users.Add(user); // Adding in the database
+                await _db.SaveChangesAsync(); //Saving the changes which is mandatory or changes won't reflect in the database
 
             }
+            //for the response copying the original user model into response model and return to controller
             return new RegisterResponseModel
             {
 
@@ -43,169 +50,150 @@ namespace UserController.Services
                 Id = user.Id,
                 Role = user.Role,
                 Standard = user.Standard,
-                Roll= user.Roll,
-                DOB= user.DOB
+                Roll = user.Roll,
+                DOB = user.DOB
             };
         }
 
+
+        //Service for getting user by Id(Primary key) .
         public async Task<User> GetById(int id)
         {
-            User user = await _db.Users.FindAsync(id);
-            if (user != null)
+            User user = await _db.Users.FindAsync(id); //Finding data by Id(Primary key)
+            if (user != null)//User found then returns the user
             {
                 return user;
             }
-            return null;
+            return null; // User not found
         }
 
 
+        //Service for getting list of users by Standard .
         public async Task<List<User>> GetAllByStd(int std)
         {
-            List<User> users = await  _db.Users.ToListAsync();
-            List<User> all = new List<User>();
-            foreach (User user in users)
-            {
-                if(user.Standard == std )
-                {
-                    all.Add(user);
-                }
-            }
-            return all;
-        } 
-        
+            // Retrieve users from the database based on the standard
+            List<User> users = await _db.Users.Where(u => u.Standard == std).ToListAsync();
+
+            return users; // Return filtered list directly
+        }
+
+
+        //Service for getting list of all active users by Standard .
         public async Task<List<User>> GetActiveStdentsByStd(int std)
         {
-            List<User> users = await  _db.Users.ToListAsync();
-            List<User> all = new List<User>();
-            foreach (User user in users)
-            {
-                if(user.Standard == std )
-                {
-                    all.Add(user);
-                }
-            }
-            return all;
+            // Retrieve active users from the database based on the standard
+            List<User> users = await _db.Users.Where(u => u.Standard == std && u.Flag).ToListAsync();
+
+            return users; // Return filtered list directly
         }
 
 
 
-
+        //Removing the user by id(Soft Delete) .
         public async Task<bool> Deleteuser(int id)
         {
             User user = await _db.Users.FindAsync(id);
 
             if (user != null)
             {
-                //_db.Users.Remove(user);
-                //_db.SaveChangesAsync();
-                user.Flag = false;
-                await _db.SaveChangesAsync();
-                return true;
+                user.Flag = false; // Mark user as inactive
+                await _db.SaveChangesAsync(); // Save changes to the database(Mandatory Line or the changes won't reflect in database)
+                return true; // Successful update
             }
-            return false;
+            return false; // User not found
         }
 
+
+        //Service for getting list of users .
         public async Task<List<User>> GetAllUsers()
         {
             List<User> allUsers = await _db.Users.ToListAsync();
-            if (allUsers.Count > 0) { return allUsers; }
-            return null;
+            return allUsers; // Return the list of users
         }
 
+
+        //Service for getting list of all active users .
         public async Task<List<User>> GetAllActiveUsers()
         {
-            List<User> allUsers = await _db.Users.ToListAsync();
-            List<User> all = new List<User>();
-            if (allUsers.Count > 0) 
-            {
-                foreach (User item in allUsers)
-                {
-                    if(item.Flag == true)
-                    {
-                       all.Add(item);
-                    }
-                }
-                return all;
-            }
-            return null;
+            // Retrieve active users directly from the database
+            List<User> activeUsers = await _db.Users.Where(u => u.Flag).ToListAsync();
+
+            return activeUsers; // Return the list of active users
         }
 
 
+        //Service for updating the user .
         public async Task<User> UpdateUser(User demoUser)
         {
+            // Retrieve the user from the database
             User _user = await _db.Users.FindAsync(demoUser.Id);
+
             if (_user == null)
             {
-                return null;
+                return null; // User not found, return null
             }
 
-            if (demoUser != null)
+            // Update user properties if the corresponding values are different
+            if (demoUser.Username != null && demoUser.Username != _user.Username)
             {
-                if (demoUser.Username != _user.Username)
-                {
-                    _user.Username = demoUser.Username;
-                }
-                if (demoUser.Email != _user.Email)
-                {
-                    _user.Email = demoUser.Email;
-                }
-                if (demoUser.Password != _user.Password)
-                {
-                    _user.Password = demoUser.Password;
-                }
-                if(demoUser.DOB != demoUser.DOB)
-                {
-                    _user.DOB = demoUser.DOB;
-                }
-                if(demoUser.Standard !=  demoUser.Standard)
-                {
-                    _user.Standard = demoUser.Standard;
-                }
-                if(demoUser.Roll != demoUser.Roll)
-                {
-                    _user.Roll = demoUser.Roll;
-                }
-
+                _user.Username = demoUser.Username;
             }
-            await _db.SaveChangesAsync();
-            return _user;
+
+            if (demoUser.Email != null && demoUser.Email != _user.Email)
+            {
+                _user.Email = demoUser.Email;
+            }
+
+            if (demoUser.Password != null && demoUser.Password != _user.Password)
+            {
+                _user.Password = demoUser.Password;
+            }
+
+            if (demoUser.DOB != _user.DOB)
+            {
+                _user.DOB = demoUser.DOB;
+            }
+
+            if (demoUser.Standard != _user.Standard)
+            {
+                _user.Standard = demoUser.Standard;
+            }
+
+            if (demoUser.Roll != _user.Roll)
+            {
+                _user.Roll = demoUser.Roll;
+            }
+
+            await _db.SaveChangesAsync(); // Save changes to the database
+            return _user; // Return the updated user
         }
 
+
+        //Service for login the user.
         public async Task<int> LoginUser(LoginModel model)
         {
-            var _user = await _db.Users.ToListAsync();
+            // Query the database to find the user with the provided email and password
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == model.Email && u.Password == model.Password);
 
-            //var user = _db.Users.FirstOrDefault(u => u.Email == model.Email && u.Password == model.Password);
-
-            foreach (var user in _user)
+            if (user != null)
             {
-
-                if (model.Email == user.Email && model.Password == user.Password && user.Flag == true)
+                if (user.Flag) // Check if the user is active
                 {
-                    return 1;
+                    return 1; // User found and is active
                 }
-                else if(model.Email == user.Email)
+                else
                 {
-                    if(model.Password != user.Password)
-                    {
-                        return 2;
-                    }
+                    return 2; // User found but is not active
                 }
             }
-            return 0;
+            else
+            {
+                return 0; // User not found with the provided email and password
+            }
 
 
-            //if (user.Flag == false)
-            //{
-            //    return 0;
-            //}
-            //else if (user != null)
-            //{
-            //    return user;
-            //}
-            //return null;
         }
 
-       
+
     }
 }

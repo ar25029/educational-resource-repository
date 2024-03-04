@@ -14,15 +14,18 @@ using UserController.Services;
 
 namespace UserController.Controllers
 {
+    // Controller for managing user-related operations
     [Route("api/[controller]")]
     [ApiController]
     public class UserControllers : ControllerBase
     {
 
+        //Dependency Injection(Can be used after registering it in the program.cs)
         private readonly IUserServices _userServices;
         private IConfiguration _configuration;
         private UserDbContext _db;
 
+        // Constructor injecting dependencies
         public UserControllers(IUserServices userServices, IConfiguration configuration, UserDbContext db)
         {
             _userServices = userServices;
@@ -30,20 +33,22 @@ namespace UserController.Controllers
             _db = db;
         }
 
-
+        // Endpoint for registering a new user
         [HttpPost("Register")]
-        public async Task<IActionResult> Register(RegisterModel model)
+        public async Task<IActionResult> Register([FromForm]RegisterModel model)
         {
+            //Validating the model 
             TryValidateModel(model);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            //If username or email is same then it will send bad request .
             var existingUser = await _db.Users.FirstOrDefaultAsync(u => u.Email == model.Email || u.Username == model.Username);
             if (existingUser != null)
             {
-                if (existingUser.Email == model.Email)
+                if (existingUser.Email == model.Email) // Email already exists
                 {
                     return BadRequest("Email already exists, try giving another email.");
                 }
@@ -55,125 +60,140 @@ namespace UserController.Controllers
 
 
             var result = await _userServices.CreateUser(model);
+
+            // If user not found
             if(result == null)
             {
                 return BadRequest("Unable to register .");
             }
+
+            //Sharing User Details
             return Ok(result);
             
         }
 
 
+        // Endpoint for getting all users
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
+            // Get the list of users directly
             var result = await _userServices.GetAllUsers();
-            if (result == null)
-            {
-                return BadRequest("The Record is empty.");
-            }
+
+            // Return the result directly
             return Ok(result);
         }
 
 
+        // Endpoint for getting only active users
         [HttpGet("GetAllActiveUser")]
         public async Task<IActionResult> GetAllActive()
         {
+            // Get the result from services directly
             var result = await _userServices.GetAllActiveUsers();
-            if (result == null)
-            {
-                return BadRequest("The Record is empty.");
-            }
+
+            // Return the result directly
             return Ok(result);
         }
 
 
-
+        // Endpoint for getting users by standard
         [HttpPost("GetByStd/{std}")]
         public async Task<IActionResult> GetByStd(int std)
         {
+            //Getting result from service
             var result = await _userServices.GetAllByStd(std);
-            if (result == null)
-            {
-                return BadRequest("The Record is empty.");
-            }
+
+            // Return the result directly
             return Ok(result);
+
         }
 
 
+        // Endpoint for getting active users by standard
         [HttpPost("GetActiveByStd/{std}")]
         public async Task<IActionResult> GetActiveByStd(int std)
         {
+            // Getting result from service
             var result = await _userServices.GetActiveStdentsByStd(std);
-            if (result == null)
-            {
-                return BadRequest("The Record is empty.");
-            }
+
+            // Return the result directly
             return Ok(result);
         }
 
-
-
-
-
+        // Endpoint for getting user by ID
         [HttpGet("GetById/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-
+            // Getting result from service
             var result = await _userServices.GetById(id);
-            if (result == null)
-            {
-                return BadRequest("User not Found");
-            }
+
+            // Return the result directly
             return Ok(result);
         }
 
-        [HttpPut("UpdateAdmin")]
+
+        // Endpoint for updating user information
+        [HttpPut("UpdateUser")]
         public async Task<IActionResult> Update(User model)
         {
-            TryValidateModel(model);
+            // Validate the model
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
+            // Call the service method to update the user
             var result = await _userServices.UpdateUser(model);
 
+            // Check if the update was successful
             if (result == null)
             {
-                return BadRequest("Failed to update.");
+                return BadRequest("Failed to update."); // Update unsuccessful
             }
-            return Ok(result);
+
+            return Ok(result); //Return updated user if the update successful
         }
 
+
+        // Endpoint for deleting a user
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
+            // Call the service method to delete the user
             var result = await _userServices.Deleteuser(id);
+
+            // Check if the delete was successful
             if (!result)
             {
-                return BadRequest("User not found with the given id.");
+                return BadRequest("Delete unsuccessful"); // Bad request if the delete was unsuccessful
             }
-            return Ok();
+
+            return Ok("Deleted Successful"); // Delete successful
         }
 
 
+        // Endpoint for user login
         [HttpPost("Login")]
         public async Task<IActionResult> Login(LoginModel model)
         {
-            TryValidateModel(model);
+            //Validating the model
+            //TryValidateModel(model);
             if (!ModelState.IsValid)
             {
                 BadRequest(ModelState);
             }
             
+            //Finding the user with given email and password
             var user = _db.Users.FirstOrDefault(u => u.Email == model.Email && u.Password == model.Password);
 
+            //Getting integer result from service
             var result = await _userServices.LoginUser(model);
-            if (result == 2)
+            if (result == 2)//Password Doesn't match with the email
             {
                 return Unauthorized("Password doesnt match with the Email");
             }
-            else if(result == 1)
+            else if(result == 1)//Email and Password Matched
             {
                 string token = GenerateToken(user);
 
@@ -186,11 +206,14 @@ namespace UserController.Controllers
                     Email = user.Email
                 });
             }
+            //No user found with given email and password
             return BadRequest("Wrong Credentials");
       
                        
         }
 
+
+        // Method to generate authentication token
         [NonAction]
         private string GenerateToken(User user)
         {
@@ -214,7 +237,7 @@ namespace UserController.Controllers
                 issuer: issuer,
                 audience: audience,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(2),
+                expires: DateTime.UtcNow.AddMinutes(2),
                 signingCredentials: creds
                 );
             return new JwtSecurityTokenHandler().WriteToken(token);

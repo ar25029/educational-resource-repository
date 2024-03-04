@@ -63,7 +63,8 @@ namespace FileHandling.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
 
-                    b.Property<DateTime>("DateCreated")
+                    b.Property<DateTime?>("DateCreated")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Flag")
@@ -104,7 +105,8 @@ namespace FileHandling.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
 
-                    b.Property<DateTime>("DateCreated")
+                    b.Property<DateTime?>("DateCreated")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Flag")

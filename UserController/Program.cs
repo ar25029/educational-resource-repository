@@ -25,6 +25,15 @@ namespace UserController
 
             builder.Services.AddTransient<IUserServices, UserServices>();
 
+            builder.Services.AddCors(option =>
+            {
+                option.AddPolicy("pol", pol =>
+                {
+                    pol.AllowAnyHeader();
+                    pol.AllowAnyMethod();
+                    pol.AllowAnyOrigin();
+                });
+            });
 
             var app = builder.Build();
 
@@ -36,6 +45,8 @@ namespace UserController
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("pol");
 
             app.UseAuthentication();
 

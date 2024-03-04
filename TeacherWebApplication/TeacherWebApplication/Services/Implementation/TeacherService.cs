@@ -8,115 +8,121 @@ namespace TeacherWebApplication.Services
 {
     public class TeacherService : ITeacherService
     {
+        //Dependency injection
         TeacherDbContext _db;
+
+        //Injecting DBContext Class
         public TeacherService(TeacherDbContext db)
         {
             _db = db;
         }
+
+        //Servise for creating/registering user .
         public async Task<TeacherResponseModel> CreateTeacher(TeacherRegisterModel trqm)
         {
-            //List<Teacher> list = _db.TeacherTable.ToList();
-            
-
-            //foreach (Teacher t in list)
-            //{
-            //    if(t.Name == trqm.Name)
-            //    {
-            //        return null;
-            //    }
-            //}
-
-
+            //Copying register model data in original teacher register model add in database
             Teacher teacher = new Teacher()
             {
-                
+
                 Email = trqm.Email,
                 Name = trqm.Name,
                 Password = trqm.Password,
                 PhoneNumber = trqm.PhoneNumber,
                 Standard = trqm.Standard,
-                
+
             };
-            if (teacher != null)
+            if (teacher != null)//No issue
             {
-                await _db.TeacherTable.AddAsync(teacher);
-                await _db.SaveChangesAsync();
+                await _db.TeacherTable.AddAsync(teacher);// Adding in the database .
+                await _db.SaveChangesAsync(); //Saving the changes which is mandatory or changes won't reflect in the database .
             }
 
+            //for the response copying the original user model into response model and return to controller
             return new TeacherResponseModel
             {
-                Id= teacher.Id,
+                Id = teacher.Id,
                 Name = teacher.Name,
                 Email = teacher.Email,
                 Standard = teacher.Standard,
                 Role = teacher.Role,
-                PhoneNumber= teacher.PhoneNumber,
+                PhoneNumber = teacher.PhoneNumber,
             };
 
         }
 
+
+        //Service for getting user by Id(Primary key) .
+        public async Task<TeacherResponseModel> GetTeacherById(int id)
+        {
+            Teacher teacher = await _db.TeacherTable.FindAsync(id);
+            if (teacher != null)//User found then returns the user
+            {
+                return new TeacherResponseModel
+                {
+                    Email = teacher.Email,
+                    Name = teacher.Name,
+                    Id = teacher.Id,
+                    Standard = teacher.Standard,
+                    Role = teacher.Role,
+                    PhoneNumber = teacher.PhoneNumber
+                };
+            }
+            return null;// User not found
+        }
+
+
+        //Removing the user by id(Hard Delete) .
         public async Task<bool> DeleteTeacher(int id)
         {
             Teacher teacher = await _db.TeacherTable.FindAsync(id);
             if (teacher != null)
             {
-                _db.TeacherTable.Remove(teacher);
-                await _db.SaveChangesAsync();
-                return true;
+                _db.TeacherTable.Remove(teacher); // Removing the teacher data from database
+                await _db.SaveChangesAsync();// Save changes to the database(Mandatory Line or the changes won't reflect in database)
+                return true; // Successful update
             }
-            return false;
+            return false; // User not found
         }
 
-       
 
+        //Service for getting list of users .
         public async Task<List<TeacherResponseModel>> GetAllTeacher()
         {
             List<Teacher> list = await _db.TeacherTable.ToListAsync();
 
-           List<TeacherResponseModel> listModel = new List<TeacherResponseModel>();
-            foreach(Teacher teacher in list)
+            List<TeacherResponseModel> listModel = new List<TeacherResponseModel>();
+            foreach (Teacher teacher in list)
             {
                 listModel.Add(new TeacherResponseModel
                 {
                     Id = teacher.Id,
-                  
+
                     Email = teacher.Email,
                     Name = teacher.Name,
-                    Standard = teacher.Standard
+                    Standard = teacher.Standard,
+                    Role = teacher.Role,
+                    PhoneNumber = teacher.PhoneNumber,
 
                 });
             }
             if (list.Count > 0)
             {
-                return listModel;
+                return listModel; // Return the list of users
             }
             return null;
         }
 
-        public async Task<TeacherResponseModel> GetTeacherById(int id)
-        {
-            Teacher teacher = await _db.TeacherTable.FindAsync(id);
-            if (teacher != null)
-            {
-                return new TeacherResponseModel
-                {
 
-                   
-                    Email = teacher.Email,
-                    Name = teacher.Name,
-                    Id = teacher.Id
-                };
-            }
-            return null;
-        }
 
+        //Service for login the user.
         public async Task<int> LoginTeacher(TeacherLoginModel tlm)
         {
+            // Query the database to find the user with the provided email and password
             var _teacher = await _db.TeacherTable.ToListAsync();
             //var user = _db.TeacherTable.FirstOrDefault(u => u.Email == tlm.Email && u.Password == tlm.Password);
             foreach (var teacher in _teacher)
             {
-                if (tlm.Email == teacher.Email && tlm.Password == teacher.Password )
+                if (tlm.Email == teacher.Email && tlm.Password == teacher.Password)
                 {
                     return 1;
                 }
@@ -127,39 +133,51 @@ namespace TeacherWebApplication.Services
                         return 2;
                     }
                 }
-               
+
             }
             return 0;
 
         }
 
+
+        //Service for updating the user .
         public async Task<Teacher> UpdateTeacher(Teacher trqm)
         {
-            Teacher teacher = await _db.TeacherTable.FindAsync(trqm.Id);
-            if(teacher == null)
+
+            // Retrieve the teacher from the database
+            Teacher _teacher = await _db.TeacherTable.FindAsync(trqm.Id);
+
+            if (_teacher == null)
             {
-                return null;
+                return null; // Teacher not found, return null
             }
-            if(trqm != null)
+
+            // Update teacher properties if the corresponding values are different
+            if (trqm.Name != null && trqm.Name != _teacher.Name)
             {
-                if(trqm.Name != teacher.Name)
-                {
-                    teacher.Name = trqm.Name;
-                }
-                if(trqm.Email != teacher.Email)
-                {
-                    teacher.Email = trqm.Email;
-                }
-                if(trqm.Password != teacher.Password)
-                {
-                    teacher.Password = trqm.Password;
-                }
+                _teacher.Name = trqm.Name;
             }
-            await _db.SaveChangesAsync();
-            return teacher;
+
+            if (trqm.Email != null && trqm.Email != _teacher.Email)
+            {
+                _teacher.Email = trqm.Email;
+            }
+
+            if (trqm.Password != null && trqm.Password != _teacher.Password)
+            {
+                _teacher.Password = trqm.Password;
+            }
+
+            if (trqm.PhoneNumber != _teacher.PhoneNumber)
+            {
+                _teacher.PhoneNumber = trqm.PhoneNumber;
+            }
+
+            await _db.SaveChangesAsync(); // Save changes to the database
+            return _teacher; // Return the updated user
 
         }
 
-       
+
     }
 }
