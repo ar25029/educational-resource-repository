@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("UserController")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5284d8b4cc0fcd6c60e578f998036983523c9f09")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+009b570ff48f2496f3ad1d052dc3624c5d115ab7")]
 [assembly: System.Reflection.AssemblyProductAttribute("UserController")]
 [assembly: System.Reflection.AssemblyTitleAttribute("UserController")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

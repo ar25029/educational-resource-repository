@@ -194,6 +194,19 @@ namespace UserController.Services
 
         }
 
-
+        public async Task<bool> Activate(string name)
+        {
+            List<User> list = await _db.Users.ToListAsync();
+            foreach (var item in list)
+            {
+                if(item.Username == name)
+                {
+                    item.Flag = true;
+                    await _db.SaveChangesAsync();
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

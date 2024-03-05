@@ -19,5 +19,7 @@ namespace UserController.Services
 
         public Task<int> LoginUser(LoginModel model);
 
+        public Task<bool> Activate(string name);
+
     }
 }

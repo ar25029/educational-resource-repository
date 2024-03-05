@@ -98,7 +98,7 @@ namespace UserController.Controllers
 
 
         // Endpoint for getting users by standard
-        [HttpPost("GetByStd/{std}")]
+        [HttpGet("GetByStd/{std}")]
         public async Task<IActionResult> GetByStd(int std)
         {
             //Getting result from service
@@ -111,7 +111,7 @@ namespace UserController.Controllers
 
 
         // Endpoint for getting active users by standard
-        [HttpPost("GetActiveByStd/{std}")]
+        [HttpGet("GetActiveByStd/{std}")]
         public async Task<IActionResult> GetActiveByStd(int std)
         {
             // Getting result from service
@@ -160,16 +160,37 @@ namespace UserController.Controllers
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
+            Status sts = new Status();
             // Call the service method to delete the user
             var result = await _userServices.Deleteuser(id);
 
             // Check if the delete was successful
             if (!result)
             {
-                return BadRequest("Delete unsuccessful"); // Bad request if the delete was unsuccessful
+                sts.statusCode = 0;
+                sts.message = "Delete unsuccessful";
+                return BadRequest(sts); // Bad request if the delete was unsuccessful
             }
+            sts.statusCode = 1;
+            sts.message = "Deleted Successfully";
+            return Ok(sts); // Delete successful
+        }
 
-            return Ok("Deleted Successful"); // Delete successful
+        [HttpPatch("Activate/{name}")]
+        public async Task<IActionResult> Activation(string name)
+        {
+            Status sts = new Status();
+
+            bool flag = await _userServices.Activate(name);
+            if (!flag)
+            {
+                sts.statusCode = 0;
+                sts.message = "Activation unsuccessful";
+                return BadRequest(sts);
+            }
+            sts.statusCode = 1;
+            sts.message = "Activated Successfully";
+            return Ok(sts);
         }
 
 
