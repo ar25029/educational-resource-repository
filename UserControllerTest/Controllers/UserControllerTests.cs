@@ -59,12 +59,11 @@ namespace UserControllerTest.Controllers
                 var model = new RegisterModel
                 {
                     Username = "test",
-                    Role = "User",
                     Email = "test12example.com",
                     Password = "password",
                     Standard = 7,
                     Roll = 32,
-                    DOB = DateTime.Now
+                    DOB = DateOnly.FromDateTime(new DateTime())
                 };
 
                 // Act
@@ -123,7 +122,7 @@ namespace UserControllerTest.Controllers
                     Role = "User",
                     Standard = 7,
                     Roll = 32,
-                    DOB = DateTime.Now,
+                    DOB = DateOnly.FromDateTime(new DateTime()),
                     Flag = true
                 };
                 context.Users.Add(existingUser);
@@ -146,7 +145,6 @@ namespace UserControllerTest.Controllers
                 var model = new RegisterModel
                 {
                     Username = "existingUser", // Existing username
-                    Role = "User",
                     Email = "new@example.com",
                     Password = "password",
                     Standard = 7,
@@ -176,7 +174,7 @@ namespace UserControllerTest.Controllers
                     Role = "User",
                     Standard = 7,
                     Roll = 32,
-                    DOB = DateTime.Now,
+                    DOB = DateOnly.FromDateTime(new DateTime()),
                     Flag = true
                 };
                 context.Users.Add(existingUser);
@@ -199,7 +197,6 @@ namespace UserControllerTest.Controllers
                 var model = new RegisterModel
                 {
                     Username = "newUser",
-                    Role = "User",
                     Email = "existing@example.com", // Existing email
                     Password = "password",
                     Standard = 7,

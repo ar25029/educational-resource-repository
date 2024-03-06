@@ -146,13 +146,13 @@ namespace FileHandling.Repository.Implementation.Pdfs
         }
 
 
-        public async Task<int> PublishPdf(string name, int std)
+        public async Task<int> PublishPdf(string name, int id)
         {
             List<Pdf> list = await _context.Pdfs.ToListAsync();
             DateTime date = DateTime.Now;
             foreach (var item in list)
             {
-                if (item.ResourceName == name && item.Standard == std)
+                if (item.ResourceName == name && item.Id == id)
                 {
                     item.Flag = 1;
                     item.DateCreated = date;

@@ -296,11 +296,11 @@ namespace FileHandling.Controllers
         }
 
         //8
-        [HttpPost("Publish/{name}/{std}")]
-        public async Task<IActionResult> PublishPdf(string name, int std)
+        [HttpPost("Publish/{name}/{id}")]
+        public async Task<IActionResult> PublishPdf(string name, int id)
         {
             Status status = new Status();
-            int stat = await _productRepo.PublishPdf(name, std);
+            int stat = await _productRepo.PublishPdf(name, id);
             if (stat == 1)
             {
                 status.StatusCode = 1;

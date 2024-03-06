@@ -8,7 +8,7 @@
 
         public int Standard {  get; set; }
 
-        public DateTime DOB { get; set; }
+        public DateOnly DOB { get; set; }
         public string Email { get; set; }
     }
 }

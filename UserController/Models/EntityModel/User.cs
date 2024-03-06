@@ -39,7 +39,7 @@ namespace UserController.Models.EntityModel
         public int Roll { get; set; }
 
       
-        public DateTime? DOB { get; set; }
+        public DateOnly? DOB { get; set; }
 
         [DefaultValue(true)]
         public Boolean Flag { get; set; }

@@ -176,12 +176,12 @@ namespace UserController.Controllers
             return Ok(sts); // Delete successful
         }
 
-        [HttpPatch("Activate/{name}")]
-        public async Task<IActionResult> Activation(string name)
+        [HttpPatch("Activate/{name}/{id}")]
+        public async Task<IActionResult> Activation(string name, int id)
         {
             Status sts = new Status();
 
-            bool flag = await _userServices.Activate(name);
+            bool flag = await _userServices.Activate(name, id);
             if (!flag)
             {
                 sts.statusCode = 0;
