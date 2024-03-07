@@ -5,6 +5,7 @@ using FileHandling.Repository.Abstract.Images;
 using FileHandling.Repository.Abstract.Pdfs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace FileHandling.Controllers
 {
@@ -311,5 +312,24 @@ namespace FileHandling.Controllers
             status.Message = "There is some issue while publishing";
             return BadRequest(status);
         }
+
+
+        [HttpGet]
+        [Route("DownloadFile/{filename}/{date}")]
+        public async Task<IActionResult> DownloadFile(string filename, DateTime date)
+        {
+            string name = _productRepo.GetPdfNameString(filename, date);
+            var filepath = Path.Combine(Directory.GetCurrentDirectory(), "uploads\\Pdf's", name);
+
+            var provider = new FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(filepath, out var contenttype))
+            {
+                contenttype = "application/octet-stream";
+            }
+
+            var bytes = await System.IO.File.ReadAllBytesAsync(filepath);
+            return File(bytes, contenttype, Path.GetFileName(filepath));
+        }
+
     }
 }

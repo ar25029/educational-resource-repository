@@ -8,6 +8,8 @@ namespace FileHandling.Repository.Abstract.Pdfs
 
         Task<bool> DeletePdf(string name, int id);
 
+        public string GetPdfNameString(string name, DateTime date);
+
         Task<string> GetPdfName(string name, DateTime date);
 
         Task<Pdf> GetPdf(string name);

@@ -31,27 +31,36 @@ namespace FileHandling.Repository.Implementation.Pdfs
 
         public async Task<bool> DeletePdf(string name, int id)
         {
+            Pdf pdfToDelete = await _context.Pdfs.FirstOrDefaultAsync(p => p.ResourceName == name && p.Id == id);
 
-            List<Pdf> list = await _context.Pdfs.ToListAsync();
-
-            if (list != null)
+            if (pdfToDelete != null)
             {
-                foreach (var product in list)
-                {
-                    if (product.ResourceName == name && product.Id == id)
-                    {
-                        product.Flag = 0;
-                        //_context.Pdfs.Remove(product);
-                        await _context.SaveChangesAsync();
-                        return true;
-
-                    }
-
-
-                }
-
+                pdfToDelete.Flag = 0;
+                await _context.SaveChangesAsync();
+                return true;
             }
+
             return false;
+            //List<Pdf> list = await _context.Pdfs.ToListAsync();
+
+            //if (list != null)
+            //{
+            //    foreach (var product in list)
+            //    {
+            //        if (product.ResourceName == name && product.Id == id)
+            //        {
+            //            product.Flag = 0;
+            //            //_context.Pdfs.Remove(product);
+            //            await _context.SaveChangesAsync();
+            //            return true;
+
+            //        }
+
+
+            //    }
+
+            //}
+            //return false;
         }
 
 
@@ -162,5 +171,29 @@ namespace FileHandling.Repository.Implementation.Pdfs
             }
             return 0;
         }
+
+        public string GetPdfNameString(string name, DateTime date)
+        {
+            List<Pdf> list = _context.Pdfs.ToList();
+
+            if (list != null)
+            {
+                foreach (var product in list)
+                {
+                    if (product.ResourceName == name && product.DateCreated == date)
+                    {
+
+                        return product.ResourcePdf;
+
+                    }
+
+
+                }
+
+            }
+            return "Check the Pdf name";
+
+        }
+
     }
 }
