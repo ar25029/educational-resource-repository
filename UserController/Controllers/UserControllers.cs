@@ -204,17 +204,26 @@ namespace UserController.Controllers
             {
                 BadRequest(ModelState);
             }
-            
+
             //Finding the user with given email and password
-            var user = _db.Users.FirstOrDefault(u => u.Email == model.Email && u.Password == model.Password);
+            var user = _db.Users.FirstOrDefault(u => u.Email == model.Email);
+
+            if (user == null)
+            {
+                return BadRequest("Wrong credentials");
+            }
+            if (user.Password != model.Password)
+            {
+                return BadRequest("Wrong Password try again with the correct one .");
+            }
 
             //Getting integer result from service
             var result = await _userServices.LoginUser(model);
             if (result == 2)//Password Doesn't match with the email
             {
-                return Unauthorized("Password doesnt match with the Email");
+                return Unauthorized("User is not active .");
             }
-            else if(result == 1)//Email and Password Matched
+            else if (result == 1)//Email and Password Matched
             {
                 string token = GenerateToken(user);
 
@@ -229,10 +238,9 @@ namespace UserController.Controllers
             }
             //No user found with given email and password
             return BadRequest("Wrong Credentials");
-      
-                       
-        }
 
+
+        }
 
         // Method to generate authentication token
         [NonAction]
