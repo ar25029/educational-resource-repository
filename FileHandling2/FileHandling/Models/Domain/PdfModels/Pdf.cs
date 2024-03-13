@@ -4,6 +4,7 @@ using System.ComponentModel;
 
 namespace FileHandling.Models.Domain.Pdf
 {
+    [Table("Err_PdfTable")]
     public class Pdf
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]

@@ -328,7 +328,8 @@ namespace FileHandling.Controllers
             }
 
             var bytes = await System.IO.File.ReadAllBytesAsync(filepath);
-            return File(bytes, contenttype, Path.GetFileName(filepath));
+            //return File(bytes, contenttype, Path.GetFileName(filepath));
+            return File(bytes, contenttype, filename+Path.GetExtension(filepath));
         }
 
     }

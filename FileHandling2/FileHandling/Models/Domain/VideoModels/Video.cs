@@ -4,6 +4,7 @@ using System.ComponentModel;
 
 namespace FileHandling.Models.Domain.VideoModels
 {
+    [Table("Err_VideoTable")]
     public class Video
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]

@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace FileHandling.Models.Domain.ImageModels
 {
+    [Table("Err_ImageTable")]
     public class Image
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -23,6 +25,9 @@ namespace FileHandling.Models.Domain.ImageModels
         public DateTime DateCreated { get; set; }
 
         public string? ResourceImage { get; set; }
+
+        [DefaultValue(2)]
+        public int Flag { get; set; } = 2;
 
         [NotMapped]
         public IFormFile ImageFile { get; set; }

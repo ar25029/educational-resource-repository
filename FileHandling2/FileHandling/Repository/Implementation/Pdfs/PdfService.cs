@@ -30,6 +30,14 @@ namespace FileHandling.Repository.Implementation.Pdfs
                         Directory.CreateDirectory(path);
                     }
                 }
+                else if (ext == ".mp4" || ext == ".mpeg")
+                {
+                    path = Path.Combine(contentPath, "uploads\\Videos");
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+                }
 
 
                 //Check the allowed extensions
@@ -88,9 +96,22 @@ namespace FileHandling.Repository.Implementation.Pdfs
 
             try
             {
+               
                 var wwwPath = this._environment.ContentRootPath;
+                var ext = Path.GetExtension(fileName);
                 var path = Path.Combine(wwwPath, "uploads\\Pdf's", fileName);
 
+                if (ext == ".pdf" || ext == ".doc")
+                {
+                    path = Path.Combine(wwwPath, "uploads\\Pdf's", fileName);
+
+                } else if (ext == ".mp4" || ext == ".mpeg")
+                {
+                    path = Path.Combine(wwwPath, "uploads\\Videos", fileName);
+
+                }
+
+                //if(ext == '.mp4' )
                 if (File.Exists(path))
                 {
                     var fileBytes = System.IO.File.ReadAllBytes(path);
@@ -104,6 +125,13 @@ namespace FileHandling.Repository.Implementation.Pdfs
                             break;
                         case ".doc":
                             contentType = "application/doc";
+                            break;
+                           // For checking if category is video
+                        case ".mp4":
+                            contentType = "video/mp4";
+                            break;
+                        case ".mpeg":
+                            contentType = "video/mpeg";
                             break;
 
                         default:

@@ -36,6 +36,9 @@ namespace FileHandling.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Flag")
+                        .HasColumnType("int");
+
                     b.Property<string>("ResourceDescription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -52,7 +55,7 @@ namespace FileHandling.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Images");
+                    b.ToTable("Err_ImageTable");
                 });
 
             modelBuilder.Entity("FileHandling.Models.Domain.Pdf.Pdf", b =>
@@ -94,7 +97,7 @@ namespace FileHandling.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Pdfs");
+                    b.ToTable("Err_PdfTable");
                 });
 
             modelBuilder.Entity("FileHandling.Models.Domain.VideoModels.Video", b =>
@@ -136,7 +139,7 @@ namespace FileHandling.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Videos");
+                    b.ToTable("Err_VideoTable");
                 });
 #pragma warning restore 612, 618
         }
