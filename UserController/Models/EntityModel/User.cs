@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UserController.Models.EntityModel
 {
-    [Table("User")]
+    [Table("Err_UserTable")]
     public class User
     {
 

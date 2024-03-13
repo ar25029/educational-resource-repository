@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TeacherWebApplication.Models.EntityModels
 {
+    [Table("Err_TeacherTable")]
     public class Teacher
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]

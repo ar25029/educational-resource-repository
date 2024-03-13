@@ -37,3 +37,90 @@ CREATE TABLE ERR.ResourceTable (
     [Flag]                INT            NOT NULL,
     CONSTRAINT [PK_Pdfs] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE TABLE Err_UserTable (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    Username NVARCHAR(50) NOT NULL,
+    Role NVARCHAR(20) NOT NULL,
+    Email NVARCHAR(200) NOT NULL,
+    Password NVARCHAR(200) NOT NULL,
+    Standard INT NOT NULL,
+    Roll INT NOT NULL,
+    DOB DATE NULL,
+    Flag BIT NOT NULL
+);
+
+CREATE TABLE Err_TeacherTable (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    Email NVARCHAR(50) NOT NULL,
+    Password NVARCHAR(30) NOT NULL,
+    PhoneNumber NVARCHAR(15) NOT NULL,
+    Role NVARCHAR(20) NOT NULL,
+    Name NVARCHAR(40) NOT NULL,
+    Standard INT NOT NULL
+);
+
+CREATE TABLE ERR_PdfTable (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    ResourceName NVARCHAR(MAX) NOT NULL,
+    ResourceCategory NVARCHAR(MAX) DEFAULT 'PDF',
+    Subject NVARCHAR(MAX) NOT NULL,
+    ResourceDescription NVARCHAR(MAX) NOT NULL,
+    DateCreated DATETIME NOT NULL,
+    Standard INT NOT NULL,
+    ResourcePdf NVARCHAR(MAX) NULL,
+    Flag INT NOT NULL Default 2
+);
+
+
+
+CREATE TABLE ERR_ImageTable (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    ResourceName NVARCHAR(MAX) NOT NULL,
+    ResourceCategory NVARCHAR(MAX) DEFAULT 'PDF',
+    Subject NVARCHAR(MAX) NOT NULL,
+    ResourceDescription NVARCHAR(MAX) NOT NULL,
+    DateCreated DATETIME NOT NULL,
+    Standard INT NOT NULL,
+    ResourceImage NVARCHAR(MAX) NULL,
+    Flag INT NOT NULL Default 2
+);
+
+CREATE TABLE ERR_VideoTable (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    ResourceName NVARCHAR(MAX) NOT NULL,
+    ResourceCategory NVARCHAR(MAX) DEFAULT 'PDF',
+    Subject NVARCHAR(MAX) NOT NULL,
+    ResourceDescription NVARCHAR(MAX) NOT NULL,
+    DateCreated DATETIME NOT NULL,
+    Standard INT NOT NULL,
+    ResourcePdf NVARCHAR(MAX) NULL,
+    Flag INT NOT NULL Default 2
+);

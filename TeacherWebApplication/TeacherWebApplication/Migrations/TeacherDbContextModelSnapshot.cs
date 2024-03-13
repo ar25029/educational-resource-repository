@@ -59,7 +59,7 @@ namespace TeacherWebApplication.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TeacherTable");
+                    b.ToTable("Err_TeacherTable");
                 });
 #pragma warning restore 612, 618
         }

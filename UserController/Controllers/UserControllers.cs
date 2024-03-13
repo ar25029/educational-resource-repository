@@ -45,16 +45,20 @@ namespace UserController.Controllers
             }
 
             //If username or email is same then it will send bad request .
-            var existingUser = await _db.Users.FirstOrDefaultAsync(u => u.Email == model.Email || u.Username == model.Username);
+            var existingUser = await _db.Users.FirstOrDefaultAsync(u => u.Email == model.Email || u.Username == model.Username || u.Roll == model.Roll);
             if (existingUser != null)
             {
                 if (existingUser.Email == model.Email) // Email already exists
                 {
                     return BadRequest("Email already exists, try giving another email.");
                 }
-                else // Username already exists
+                else if (existingUser.Username == model.Username)  //Username already exists
                 {
                     return BadRequest("Username already exists, try giving a different username.");
+                }
+                else if (existingUser.Roll == model.Roll)
+                {
+                    return BadRequest("Roll number already exists try giving another roll number .");
                 }
             }
 

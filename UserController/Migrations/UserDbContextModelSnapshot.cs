@@ -64,7 +64,7 @@ namespace UserController.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("Err_UserTable");
                 });
 #pragma warning restore 612, 618
         }
