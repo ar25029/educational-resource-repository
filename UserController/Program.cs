@@ -18,10 +18,17 @@ namespace UserController
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            //builder.Services.AddDbContext<UserDbContext>(options =>
+            //{
+            //    options.UseSqlServer(builder.Configuration.GetConnectionString("UserSqlConnection"));
+            //});
+
+
             builder.Services.AddDbContext<UserDbContext>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("UserSqlConnection"));
+                options.UseMySQL(builder.Configuration.GetConnectionString("UserSqlConnection"));
             });
+
 
             builder.Services.AddTransient<IUserServices, UserServices>();
 

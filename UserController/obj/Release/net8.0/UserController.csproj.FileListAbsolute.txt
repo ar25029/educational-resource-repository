@@ -136,3 +136,16 @@ D:\24167_Suraj_Shinde\C#\practise\FileHandling\educational-resource-repository\U
 D:\24167_Suraj_Shinde\C#\practise\FileHandling\educational-resource-repository\UserController\obj\Release\net8.0\UserController.pdb
 D:\24167_Suraj_Shinde\C#\practise\FileHandling\educational-resource-repository\UserController\obj\Release\net8.0\UserController.genruntimeconfig.cache
 D:\24167_Suraj_Shinde\C#\practise\FileHandling\educational-resource-repository\UserController\obj\Release\net8.0\ref\UserController.dll
+D:\24167_Suraj_Shinde\C#\practise\FileHandling\educational-resource-repository\UserController\bin\Release\net8.0\BouncyCastle.Cryptography.dll
+D:\24167_Suraj_Shinde\C#\practise\FileHandling\educational-resource-repository\UserController\bin\Release\net8.0\Google.Protobuf.dll
+D:\24167_Suraj_Shinde\C#\practise\FileHandling\educational-resource-repository\UserController\bin\Release\net8.0\K4os.Compression.LZ4.dll
+D:\24167_Suraj_Shinde\C#\practise\FileHandling\educational-resource-repository\UserController\bin\Release\net8.0\K4os.Compression.LZ4.Streams.dll
+D:\24167_Suraj_Shinde\C#\practise\FileHandling\educational-resource-repository\UserController\bin\Release\net8.0\K4os.Hash.xxHash.dll
+D:\24167_Suraj_Shinde\C#\practise\FileHandling\educational-resource-repository\UserController\bin\Release\net8.0\MySql.Data.dll
+D:\24167_Suraj_Shinde\C#\practise\FileHandling\educational-resource-repository\UserController\bin\Release\net8.0\MySql.EntityFrameworkCore.dll
+D:\24167_Suraj_Shinde\C#\practise\FileHandling\educational-resource-repository\UserController\bin\Release\net8.0\ZstdSharp.dll
+D:\24167_Suraj_Shinde\C#\practise\FileHandling\educational-resource-repository\UserController\bin\Release\net8.0\runtimes\win-x64\native\comerr64.dll
+D:\24167_Suraj_Shinde\C#\practise\FileHandling\educational-resource-repository\UserController\bin\Release\net8.0\runtimes\win-x64\native\gssapi64.dll
+D:\24167_Suraj_Shinde\C#\practise\FileHandling\educational-resource-repository\UserController\bin\Release\net8.0\runtimes\win-x64\native\k5sprt64.dll
+D:\24167_Suraj_Shinde\C#\practise\FileHandling\educational-resource-repository\UserController\bin\Release\net8.0\runtimes\win-x64\native\krb5_64.dll
+D:\24167_Suraj_Shinde\C#\practise\FileHandling\educational-resource-repository\UserController\bin\Release\net8.0\runtimes\win-x64\native\krbcc64.dll
